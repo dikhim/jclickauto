@@ -25,13 +25,21 @@ public class NewJsEngine {
         this.robot = robot;
         engine = new ScriptEngineManager().getEngineByName("nashorn");
         methodInvoker = new MethodInvoker(engine);
+        initScriptObjects();
     }
 
+    // On start run all scripts in new thread
     public void start() {
-        scripts.forEach(s-> {
+        runInNewThread(() ->
+        {
+            engine = new ScriptEngineManager().getEngineByName("nashorn");
+            methodInvoker = new MethodInvoker(engine);
+            loadScriptObjects();
             try {
-                engine.eval(s);
-            } catch (ScriptException e) {
+                for (String s : scripts) {
+                    engine.eval(s);
+                }
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         });
@@ -59,43 +67,77 @@ public class NewJsEngine {
 
     private List<String> scripts = new ArrayList<>();
 
-    public void eval(String script) {
-        if (isRunning()) {
-            try {
-                engine.eval(script);
-            } catch (ScriptException e) {
-                e.printStackTrace();
-            }
-        } else {
-            scripts.add(script);
-        } 
+    public void putScript(String script) {
+        scripts.add(script);
     }
-    
-    private Map<String, Object> scriptObjects = new HashMap<>();
+
+    private Map<String, Object> objects = new HashMap<>();
     public void putObject(String name, Object object) {
-        scriptObjects.put(name, object);
+        objects.put(name, object);
     }
-    
-    
-    
-    private void loadDefaultScriptObjects() {
+
+
+    private Map<String, Object> defaultObjects = new HashMap<>();
+    private boolean interrupted = false;
+    private void initScriptObjects() {
         KeyboardObject keyboardObject = new JsKeyboardObject(robot);
         MouseObject mouseObject = new JsMouseObject(robot);
         SystemObject systemObject = new JsSystemObject(robot);
         CombinedObject combinedObject = new JsCombinedObject(mouseObject, keyboardObject, systemObject);
         ClipboardObject clipboardObject = new JsClipboardObject(robot);
         CreateObject createObject = new JsCreateObject();
-        scriptObjects.clear();
-        scriptObjects.put("key", keyboardObject);
-        scriptObjects.put("mouse", mouseObject);
-        scriptObjects.put("system", systemObject);
-        scriptObjects.put("combined", combinedObject);
-        scriptObjects.put("clipboard", clipboardObject);
-        scriptObjects.put("create", createObject);
+        defaultObjects.clear();
+        defaultObjects.put("key", keyboardObject);
+        defaultObjects.put("mouse", mouseObject);
+        defaultObjects.put("system", systemObject);
+        defaultObjects.put("combined", combinedObject);
+        defaultObjects.put("clipboard", clipboardObject);
+        defaultObjects.put("create", createObject);
+        defaultObjects.put("iterrupted", interrupted);
+        objects.putAll(defaultObjects);
     }
     
+    private void resetObjects() {
+        objects.clear();
+        objects.putAll(defaultObjects);
+    }
     
+    private void loadScriptObjects() {
+        objects.forEach((name, object) -> engine.put(name,object));
+    }
+
     public boolean isRunning() {
         return false;
     }
+
+    private void runInNewThread(Runnable runnable) {
+        thread = new Thread(runnable);
+        thread.start();
+    }
+
+
+    public void invokeFunction(String name, Object... args) {
+        methodInvoker.invokeMethod(name, args);
+    }
+
+    public void registerInvocableMethod(String name, int maxNumberOfThreads) {
+        methodInvoker.registerMethod(name, maxNumberOfThreads);
+    }
+    
+    public void removeScripts() {
+        scripts.clear();
+    }
+    
+    public void removeObjects() {
+        objects.clear();
+        objects.putAll(defaultObjects);
+    }
+        
+    
+    public void reset() {
+        stop();
+        removeObjects();
+        removeScripts();
+    }
+
 }

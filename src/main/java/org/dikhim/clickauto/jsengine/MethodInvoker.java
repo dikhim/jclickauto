@@ -11,8 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MethodInvoker {
-    Invocable invocable;
+class MethodInvoker {
+    private Invocable invocable;
     private Map<String, Lock> invocableMethods = new HashMap<>();
     private List<Thread> threads = new ArrayList<>();
 
@@ -54,7 +54,8 @@ public class MethodInvoker {
         }
     }
 
-    public void stop() {
+    @SuppressWarnings("deprecation")
+    void stop() {
         threads.removeIf(t -> {
             try {
                 t.stop();
