@@ -2,7 +2,6 @@ package org.dikhim.clickauto.jsengine.utils;
 
 public class KeyCode {
     private String name;
-    private int nativeCode;
     private int eventCode;
 
     public int getUselessCode() {
@@ -23,14 +22,6 @@ public class KeyCode {
         this.name = name;
     }
 
-    public int getNativeCode() {
-        return nativeCode;
-    }
-
-    public void setNativeCode(int nativeCode) {
-        this.nativeCode = nativeCode;
-    }
-
     public int getEventCode() {
         return eventCode;
     }
@@ -39,9 +30,8 @@ public class KeyCode {
         this.eventCode = eventCode;
     }
 
-    public KeyCode(String name, int nativeCode, int eventCode, int uselessCode) {
+    public KeyCode(String name, int eventCode, int uselessCode) {
         this.name = name;
-        this.nativeCode = nativeCode;
         this.eventCode = eventCode;
         this.uselessCode = uselessCode;
     }

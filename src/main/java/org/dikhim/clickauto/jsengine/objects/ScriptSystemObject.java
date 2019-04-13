@@ -1,15 +1,15 @@
 package org.dikhim.clickauto.jsengine.objects;
 
 import javafx.application.Platform;
+import org.dikhim.clickauto.jsengine.ClickAutoScriptEngine;
 import org.dikhim.clickauto.jsengine.objects.Classes.Image;
 import org.dikhim.clickauto.util.MathUtil;
 import org.dikhim.clickauto.util.Out;
-import org.dikhim.clickauto.jsengine.JSEngine;
 import org.dikhim.clickauto.jsengine.robot.Robot;
 
 @SuppressWarnings("unused")
 public class ScriptSystemObject implements SystemObject {
-    private JSEngine engine;
+    private ClickAutoScriptEngine engine;
     private Robot robot;
     private final Object monitor;
 
@@ -17,7 +17,7 @@ public class ScriptSystemObject implements SystemObject {
 
     private double multiplier = MULTIPLIER;
 
-    public ScriptSystemObject(JSEngine engine) {
+    public ScriptSystemObject(ClickAutoScriptEngine engine) {
         this.engine = engine;
         this.robot = engine.getRobot();
         this.monitor = robot.getMonitor();
@@ -118,7 +118,8 @@ public class ScriptSystemObject implements SystemObject {
         if (ms <= 0) return;
         try {
             Thread.sleep(getMultipliedDelay(ms));
-        } catch (InterruptedException ignored) {
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
     }
 
@@ -127,7 +128,8 @@ public class ScriptSystemObject implements SystemObject {
         if (ms <= 0) return;
         try {
             Thread.sleep(ms);
-        } catch (InterruptedException ignored) {
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
     }
 

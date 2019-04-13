@@ -110,7 +110,7 @@ public class ScriptKeyboardObject implements KeyboardObject {
                 int keyCode = KeyCodes.getEventCodeByName(key);
                 if (keyCode != -1) {
                     robot.keyPress(keyCode);
-                    robot.delay(getMultipliedPressDelay());
+                    delay(getMultipliedPressDelay());
                 } else {
                     Out.println(String.format("Undefined key '%s'in sequence '%s' in press method", key, keys));
                 }
@@ -126,7 +126,7 @@ public class ScriptKeyboardObject implements KeyboardObject {
                 int keyCode = KeyCodes.getEventCodeByName(key);
                 if (keyCode != -1) {
                     robot.keyRelease(keyCode);
-                    robot.delay(getMultipliedReleaseDelay());
+                    delay(getMultipliedReleaseDelay());
                 } else {
                     Out.println(String.format("Undefined key '%s' in release method", key));
                 }
@@ -223,9 +223,9 @@ public class ScriptKeyboardObject implements KeyboardObject {
                 int keyCode = KeyCodes.getEventCodeByName(key);
                 if (keyCode != -1) {
                     robot.keyPress(keyCode);
-                    robot.delay(getMultipliedPressDelay());
+                    delay(getMultipliedPressDelay());
                     robot.keyRelease(keyCode);
-                    robot.delay(getMultipliedReleaseDelay());
+                    delay(getMultipliedReleaseDelay());
                 } else {
                     Out.println(String.format("Undefined key '%s' in type method", key));
                 }
@@ -247,5 +247,13 @@ public class ScriptKeyboardObject implements KeyboardObject {
         if (delay < minDelay) return minDelay;
 
         return delay;
+    }
+
+    private void delay(int delay) {
+        try {
+            Thread.sleep(delay);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 }

@@ -12,15 +12,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class NewJsEngine {
+public class ClickAutoScriptEngine {
     private BooleanProperty running = new SimpleBooleanProperty(false);
 
     private final Robot robot;
     private ScriptEngine engine;
     private MethodInvoker methodInvoker;
     private Thread thread;
+    private final static int TIME_TO_WAIT_INTERRUPTION =1000;
+    private int timeToWaitInterruption = TIME_TO_WAIT_INTERRUPTION;
 
-    public NewJsEngine(Robot robot) {
+    public ClickAutoScriptEngine(Robot robot) {
         this.robot = robot;
         engine = new ScriptEngineManager().getEngineByName("nashorn");
         methodInvoker = new MethodInvoker(engine);
@@ -49,19 +51,29 @@ public class NewJsEngine {
      */
     @SuppressWarnings("deprecation")
     public void stop() {
-        if (thread != null) {
-            try {
-                thread.stop();
-            } catch (ThreadDeath ignored) {
-
+        try {
+            if (thread != null) {
+                thread.interrupt();
+                System.out.println("interrupt" + thread.getName());
+                thread.join(timeToWaitInterruption);
+                System.out.println("waitComplete");
+                if (thread.isAlive()) {
+                    try {
+                        thread.stop();
+                    } catch (ThreadDeath ignored) {
+                    }
+                }
+                thread = null;
             }
-            thread = null;
+            if (methodInvoker != null) {
+                methodInvoker.stop();
+                methodInvoker = null;
+            }
+            running.setValue(false);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
-        if (methodInvoker != null) {
-            methodInvoker.stop();
-            methodInvoker = null;
-        }
-        running.setValue(false);
+
     }
 
     private List<String> scripts = new ArrayList<>();
@@ -71,6 +83,7 @@ public class NewJsEngine {
     }
 
     private Map<String, Object> objects = new HashMap<>();
+
     public void putObject(String name, Object object) {
         objects.put(name, object);
     }
@@ -78,6 +91,7 @@ public class NewJsEngine {
 
     private Map<String, Object> defaultObjects = new HashMap<>();
     private boolean interrupted = false;
+
     private void initScriptObjects() {
         KeyboardObject keyboardObject = new ScriptKeyboardObject(robot);
         MouseObject mouseObject = new ScriptMouseObject(robot);
@@ -85,6 +99,7 @@ public class NewJsEngine {
         CombinedObject combinedObject = new ScriptCombinedObject(mouseObject, keyboardObject, systemObject);
         ClipboardObject clipboardObject = new ScriptClipboardObject(robot);
         CreateObject createObject = new ScriptCreateObject();
+        ThreadObject threadObject = new ScriptThreadObject();
         defaultObjects.clear();
         defaultObjects.put("key", keyboardObject);
         defaultObjects.put("mouse", mouseObject);
@@ -92,21 +107,16 @@ public class NewJsEngine {
         defaultObjects.put("combined", combinedObject);
         defaultObjects.put("clipboard", clipboardObject);
         defaultObjects.put("create", createObject);
-        defaultObjects.put("iterrupted", interrupted);
+        defaultObjects.put("thread", threadObject);
         objects.putAll(defaultObjects);
     }
-    
-    private void resetObjects() {
-        objects.clear();
-        objects.putAll(defaultObjects);
-    }
-    
+
     private void loadScriptObjects() {
-        objects.forEach((name, object) -> engine.put(name,object));
+        objects.forEach((name, object) -> engine.put(name, object));
     }
 
     public boolean isRunning() {
-        return false;
+        return running.get();
     }
 
     private void runInNewThread(Runnable runnable) {
@@ -122,21 +132,33 @@ public class NewJsEngine {
     public void registerInvocableMethod(String name, int maxNumberOfThreads) {
         methodInvoker.registerMethod(name, maxNumberOfThreads);
     }
-    
+
     public void removeScripts() {
         scripts.clear();
     }
-    
+
     public void removeObjects() {
         objects.clear();
         objects.putAll(defaultObjects);
     }
-        
-    
+
+
     public void reset() {
         stop();
         removeObjects();
         removeScripts();
+        timeToWaitInterruption = TIME_TO_WAIT_INTERRUPTION;
     }
 
+    public int getTimeToWaitInterruption() {
+        return timeToWaitInterruption;
+    }
+
+    public void setTimeToWaitInterruption(int timeToWaitInterruption) {
+        this.timeToWaitInterruption = timeToWaitInterruption;
+    }
+
+    public Robot getRobot() {
+        return this.robot;
+    }
 }
