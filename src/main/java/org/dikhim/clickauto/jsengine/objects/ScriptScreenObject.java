@@ -8,12 +8,12 @@ import org.dikhim.clickauto.util.ShapeUtil;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class JsScreenObject implements ScreenObject {
+public class ScriptScreenObject implements ScreenObject {
 
     private final Object monitor;
     private final Robot robot;
 
-    public JsScreenObject(Robot robot) {
+    public ScriptScreenObject(Robot robot) {
         this.robot = robot;
         this.monitor = robot.getMonitor();
     }

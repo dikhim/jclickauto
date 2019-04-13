@@ -9,12 +9,12 @@ import org.dikhim.clickauto.util.Out;
 
 import java.util.List;
 
-public class JsCombinedObject implements CombinedObject {
+public class ScriptCombinedObject implements CombinedObject {
     private MouseObject mouseObject;
     private KeyboardObject keyboardObject;
     private SystemObject systemObject;
 
-    public JsCombinedObject( MouseObject mouseObject, KeyboardObject keyboardObject, SystemObject systemObject) {
+    public ScriptCombinedObject(MouseObject mouseObject, KeyboardObject keyboardObject, SystemObject systemObject) {
         this.mouseObject = mouseObject;
         this.keyboardObject = keyboardObject;
         this.systemObject = systemObject;

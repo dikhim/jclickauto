@@ -8,7 +8,7 @@ import org.dikhim.clickauto.jsengine.JSEngine;
 import org.dikhim.clickauto.jsengine.robot.Robot;
 
 @SuppressWarnings("unused")
-public class JsSystemObject implements SystemObject {
+public class ScriptSystemObject implements SystemObject {
     private JSEngine engine;
     private Robot robot;
     private final Object monitor;
@@ -17,13 +17,13 @@ public class JsSystemObject implements SystemObject {
 
     private double multiplier = MULTIPLIER;
 
-    public JsSystemObject(JSEngine engine) {
+    public ScriptSystemObject(JSEngine engine) {
         this.engine = engine;
         this.robot = engine.getRobot();
         this.monitor = robot.getMonitor();
     }
 
-    public JsSystemObject(Robot robot) {
+    public ScriptSystemObject(Robot robot) {
         this.robot = robot;
         this.monitor = robot.getMonitor();
     }

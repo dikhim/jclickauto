@@ -12,7 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class JsCreateObject implements CreateObject {
+public class ScriptCreateObject implements CreateObject {
 
     @Override
     public Image image(int width, int height) {

@@ -35,12 +35,12 @@ public class JSEngine {
         thread = new Thread(() -> {
             engine = new ScriptEngineManager().getEngineByName("nashorn");
             methodInvoker = new MethodInvoker(engine);
-            KeyboardObject keyboardObject = new JsKeyboardObject(robot);
-            MouseObject mouseObject = new JsMouseObject(robot);
-            SystemObject systemObject = new JsSystemObject(this);
-            CombinedObject combinedObject = new JsCombinedObject(mouseObject, keyboardObject, systemObject);
-            ClipboardObject clipboardObject = new JsClipboardObject(robot);
-            CreateObject createObject = new JsCreateObject();
+            KeyboardObject keyboardObject = new ScriptKeyboardObject(robot);
+            MouseObject mouseObject = new ScriptMouseObject(robot);
+            SystemObject systemObject = new ScriptSystemObject(this);
+            CombinedObject combinedObject = new ScriptCombinedObject(mouseObject, keyboardObject, systemObject);
+            ClipboardObject clipboardObject = new ScriptClipboardObject(robot);
+            CreateObject createObject = new ScriptCreateObject();
 
             engine.put("mouse", mouseObject);
             engine.put("key", keyboardObject);

@@ -8,7 +8,7 @@ import org.dikhim.clickauto.util.Out;
 
 import java.awt.*;
 
-public class JsMouseObject implements MouseObject {
+public class ScriptMouseObject implements MouseObject {
 
     // Constants
     private final int PRESS_DELAY = 10;
@@ -29,7 +29,7 @@ public class JsMouseObject implements MouseObject {
     private Robot robot;
     private final Object monitor;
 
-    public JsMouseObject(Robot robot) {
+    public ScriptMouseObject(Robot robot) {
         this.robot = robot;
         this.monitor = robot.getMonitor();
     }

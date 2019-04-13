@@ -7,7 +7,6 @@ import org.dikhim.clickauto.jsengine.robot.Robot;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -80,12 +79,12 @@ public class NewJsEngine {
     private Map<String, Object> defaultObjects = new HashMap<>();
     private boolean interrupted = false;
     private void initScriptObjects() {
-        KeyboardObject keyboardObject = new JsKeyboardObject(robot);
-        MouseObject mouseObject = new JsMouseObject(robot);
-        SystemObject systemObject = new JsSystemObject(robot);
-        CombinedObject combinedObject = new JsCombinedObject(mouseObject, keyboardObject, systemObject);
-        ClipboardObject clipboardObject = new JsClipboardObject(robot);
-        CreateObject createObject = new JsCreateObject();
+        KeyboardObject keyboardObject = new ScriptKeyboardObject(robot);
+        MouseObject mouseObject = new ScriptMouseObject(robot);
+        SystemObject systemObject = new ScriptSystemObject(robot);
+        CombinedObject combinedObject = new ScriptCombinedObject(mouseObject, keyboardObject, systemObject);
+        ClipboardObject clipboardObject = new ScriptClipboardObject(robot);
+        CreateObject createObject = new ScriptCreateObject();
         defaultObjects.clear();
         defaultObjects.put("key", keyboardObject);
         defaultObjects.put("mouse", mouseObject);

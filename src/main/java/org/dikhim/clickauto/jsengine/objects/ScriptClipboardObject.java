@@ -6,10 +6,10 @@ import java.awt.*;
 import java.awt.datatransfer.*;
 import java.io.IOException;
 
-public class JsClipboardObject implements ClipboardObject{
+public class ScriptClipboardObject implements ClipboardObject{
     private final Object monitor;
     
-    public JsClipboardObject(Robot robot) {
+    public ScriptClipboardObject(Robot robot) {
         this.monitor = robot.getMonitor();
     }
 

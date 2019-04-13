@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-public class JsKeyboardObject implements KeyboardObject {
+public class ScriptKeyboardObject implements KeyboardObject {
 
     // Constants
     private final int PRESS_DELAY = 10;
@@ -28,7 +28,7 @@ public class JsKeyboardObject implements KeyboardObject {
     private Robot robot;
     private final Object monitor;
 
-    public JsKeyboardObject(Robot robot) {
+    public ScriptKeyboardObject(Robot robot) {
         this.robot = robot;
         this.monitor = robot.getMonitor();
     }
