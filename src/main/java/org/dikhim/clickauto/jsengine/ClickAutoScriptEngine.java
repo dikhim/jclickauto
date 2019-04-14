@@ -1,7 +1,5 @@
 package org.dikhim.clickauto.jsengine;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import org.dikhim.clickauto.jsengine.objects.*;
 import org.dikhim.clickauto.jsengine.robot.Robot;
 
@@ -13,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 
 public class ClickAutoScriptEngine {
-    private BooleanProperty running = new SimpleBooleanProperty(false);
 
     private final Robot robot;
     private ScriptEngine engine;
@@ -69,7 +66,6 @@ public class ClickAutoScriptEngine {
                 methodInvoker.stop();
                 methodInvoker = null;
             }
-            running.setValue(false);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -113,10 +109,6 @@ public class ClickAutoScriptEngine {
 
     private void loadScriptObjects() {
         objects.forEach((name, object) -> engine.put(name, object));
-    }
-
-    public boolean isRunning() {
-        return running.get();
     }
 
     private void runInNewThread(Runnable runnable) {

@@ -8,10 +8,10 @@
     <artifactId>click-auto</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
-
     <name>Clicks automation</name>
     <description>Java script interpretation around Robot class</description>
-    
+    <url>github.com/dikhim/clickauto</url>
+
     <licenses>
         <license>
             <name>Apache License, Version 2.0</name>
@@ -19,7 +19,21 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
-    
+    <scm>
+        <url>scm:git://github.com/dikhim/clickauto</url>
+    </scm>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
+
     <dependencies>
         <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-collections4 -->
         <dependency>
@@ -27,40 +41,55 @@
             <artifactId>commons-collections4</artifactId>
             <version>4.0</version>
         </dependency>
-
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
-        </dependency>
     </dependencies>
-    
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.0</version>
                 <configuration>
-                    <source>8</source>
-                    <target>8</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
-
-
             <plugin>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <version>2.8.2</version>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5</version>
+                <configuration>
+                    <useReleaseProfile>false</useReleaseProfile>
+                    <releaseProfiles>release</releaseProfiles>
+                    <goals>deploy</goals>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.5</version>
                 <executions>
                     <execution>
-                        <id>default-deploy</id>
-                        <phase>deploy</phase>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
                         <goals>
-                            <goal>deploy</goal>
+                            <goal>sign</goal>
                         </goals>
                     </execution>
                 </executions>
             </plugin>
-            
+
         </plugins>
+
     </build>
+
+
+    <developers>
+        <developer>
+            <id>mulanov.s.v</id>
+            <name>Muslanov Serhii</name>
+            <email>muslanov.s.v@gmail.com</email>
+            <organization>Personal</organization>
+            <organizationUrl>https://github.com/dikhim/</organizationUrl>
+        </developer>
+    </developers>
 </project>

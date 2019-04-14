@@ -1,6 +1,5 @@
 package org.dikhim.clickauto.jsengine.objects;
 
-import javafx.application.Platform;
 import org.dikhim.clickauto.jsengine.ClickAutoScriptEngine;
 import org.dikhim.clickauto.jsengine.objects.Classes.Image;
 import org.dikhim.clickauto.util.MathUtil;
@@ -26,11 +25,6 @@ public class ScriptSystemObject implements SystemObject {
     public ScriptSystemObject(Robot robot) {
         this.robot = robot;
         this.monitor = robot.getMonitor();
-    }
-
-    @Override
-    public void exit() {
-        Platform.exit();
     }
 
     @Override

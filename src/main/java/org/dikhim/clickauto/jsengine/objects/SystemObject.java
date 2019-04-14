@@ -5,7 +5,6 @@ import org.dikhim.clickauto.jsengine.objects.Classes.Image;
 
 @SuppressWarnings("unused")
 public interface SystemObject {
-    void exit();
     
     int getMultipliedDelay(int delay);
 
