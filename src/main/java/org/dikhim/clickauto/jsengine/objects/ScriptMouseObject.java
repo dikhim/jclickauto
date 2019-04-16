@@ -4,7 +4,7 @@ package org.dikhim.clickauto.jsengine.objects;
 import org.dikhim.clickauto.jsengine.robot.Robot;
 import org.dikhim.clickauto.jsengine.utils.MouseCodes;
 import org.dikhim.clickauto.util.MathUtil;
-import org.dikhim.clickauto.util.Out;
+import org.dikhim.clickauto.util.logger.Log;
 
 import java.awt.*;
 
@@ -26,24 +26,22 @@ public class ScriptMouseObject implements MouseObject {
     private int minDelay = MIN_DELAY;
 
 
-    private Robot robot;
-    private final Object monitor;
+    private final Robot robot;
 
     public ScriptMouseObject(Robot robot) {
         this.robot = robot;
-        this.monitor = robot.getMonitor();
     }
 
     @Override
     public int getX() {
-        synchronized (monitor) {
+        synchronized (robot) {
             return MouseInfo.getPointerInfo().getLocation().x;
         }
     }
 
     @Override
     public int getY() {
-        synchronized (monitor) {
+        synchronized (robot) {
             return MouseInfo.getPointerInfo().getLocation().y;
         }
     }
@@ -51,7 +49,7 @@ public class ScriptMouseObject implements MouseObject {
     // basics
     @Override
     public void button(String button, String action) {
-        synchronized (monitor) {
+        synchronized (robot) {
             switch (action) {
                 case "PRESS":
                     press(button);
@@ -63,14 +61,14 @@ public class ScriptMouseObject implements MouseObject {
                     click(button);
                     break;
                 default:
-                    Out.println(String.format("Undefined mouse actions '%s' in button method", action));
+                    Log.error("Undefined mouse actions '%s' in button method", action);
             }
         }
     }
 
     @Override
     public void buttonAt(String button, String action, int x, int y) {
-        synchronized (monitor) {
+        synchronized (robot) {
             moveTo(x, y);
             button(button, action);
         }
@@ -79,7 +77,7 @@ public class ScriptMouseObject implements MouseObject {
     // movement
     @Override
     public void move(int dx, int dy) {
-        synchronized (monitor) {
+        synchronized (robot) {
             robot.mouseMove(getX() + dx, getY() + dy);
             delay(getMultipliedMoveDelay());
         }
@@ -87,7 +85,7 @@ public class ScriptMouseObject implements MouseObject {
 
     @Override
     public void moveAndButton(String button, String action, int dx, int dy) {
-        synchronized (monitor) {
+        synchronized (robot) {
             move(dx, dy);
             button(button, action);
         }
@@ -95,9 +93,9 @@ public class ScriptMouseObject implements MouseObject {
 
     @Override
     public void moveTo(int x, int y) {
-        synchronized (monitor) {
+        synchronized (robot) {
             if (x < 0 || y < 0) {
-                Out.println(String.format("Negative coordinates '%s,%s' at moveTo method", x, y));
+                Log.error("Negative coordinates '%s,%s' at moveTo method\n", x, y);
                 return;
             }
             robot.mouseMove(x, y);
@@ -107,9 +105,9 @@ public class ScriptMouseObject implements MouseObject {
 
     @Override
     public void setX(int x) {
-        synchronized (monitor) {
+        synchronized (robot) {
             if (x < 0) {
-                Out.println(String.format("Negative coordinate '%s' at setX method", x));
+                Log.error("Negative coordinate '%s' at setX method\n", x);
                 return;
             }
             robot.mouseMove(x, getY());
@@ -119,9 +117,9 @@ public class ScriptMouseObject implements MouseObject {
 
     @Override
     public void setY(int y) {
-        synchronized (monitor) {
+        synchronized (robot) {
             if (y < 0) {
-                Out.println(String.format("Negative coordinate '%s' at setY method", y));
+                Log.error("Negative coordinate '%s' at setY method\n", y);
                 return;
             }
             robot.mouseMove(getX(), y);
@@ -138,12 +136,12 @@ public class ScriptMouseObject implements MouseObject {
      */
     @Override
     public void click(String buttons) {
-        synchronized (monitor) {
+        synchronized (robot) {
             String[] buttonList = buttons.split(" ");
             for (String btn : buttonList) {
                 int buttonEventCode = MouseCodes.getEventCodeByName(btn);
                 if (buttonEventCode == -1) {
-                    Out.println(String.format("Undefined mouse button '%s' in click method", btn));
+                    Log.error("Undefined mouse button '%s' in click method\n", btn);
                     return;
                 }
                 robot.mousePress(buttonEventCode);
@@ -156,7 +154,7 @@ public class ScriptMouseObject implements MouseObject {
 
     @Override
     public void clickAt(String button, int x, int y) {
-        synchronized (monitor) {
+        synchronized (robot) {
             moveTo(x, y);
             click(button);
         }
@@ -164,7 +162,7 @@ public class ScriptMouseObject implements MouseObject {
 
     @Override
     public void moveAndClick(String button, int dx, int dy) {
-        synchronized (monitor) {
+        synchronized (robot) {
             move(dx, dy);
             click(button);
         }
@@ -179,10 +177,10 @@ public class ScriptMouseObject implements MouseObject {
      */
     @Override
     public void press(String button) {
-        synchronized (monitor) {
+        synchronized (robot) {
             int buttonEventCode = MouseCodes.getEventCodeByName(button);
             if (buttonEventCode == -1) {
-                Out.println(String.format("Undefined mouse button '%s' in press method", button));
+                Log.error("Undefined mouse button '%s' in press method\n", button);
                 return;
             }
             robot.mousePress(buttonEventCode);
@@ -192,7 +190,7 @@ public class ScriptMouseObject implements MouseObject {
 
     @Override
     public void pressAt(String button, int x, int y) {
-        synchronized (monitor) {
+        synchronized (robot) {
             moveTo(x, y);
             press(button);
         }
@@ -200,7 +198,7 @@ public class ScriptMouseObject implements MouseObject {
 
     @Override
     public void moveAndPress(String button, int dx, int dy) {
-        synchronized (monitor) {
+        synchronized (robot) {
             move(dx, dy);
             press(button);
         }
@@ -215,10 +213,10 @@ public class ScriptMouseObject implements MouseObject {
      */
     @Override
     public void release(String button) {
-        synchronized (monitor) {
+        synchronized (robot) {
             int buttonEventCode = MouseCodes.getEventCodeByName(button);
             if (buttonEventCode == -1) {
-                Out.println(String.format("Undefined mouse button '%s' in release method", button));
+                Log.error("Undefined mouse button '%s' in release method\n", button);
                 return;
             }
             robot.mouseRelease(buttonEventCode);
@@ -228,7 +226,7 @@ public class ScriptMouseObject implements MouseObject {
 
     @Override
     public void releaseAt(String button, int x, int y) {
-        synchronized (monitor) {
+        synchronized (robot) {
             moveTo(x, y);
             release(button);
         }
@@ -236,7 +234,7 @@ public class ScriptMouseObject implements MouseObject {
 
     @Override
     public void moveAndRelease(String button, int dx, int dy) {
-        synchronized (monitor) {
+        synchronized (robot) {
             move(dx, dy);
             release(button);
         }
@@ -244,7 +242,7 @@ public class ScriptMouseObject implements MouseObject {
 
     @Override
     public void moveAndWheel(String direction, int amount, int dx, int dy) {
-        synchronized (monitor) {
+        synchronized (robot) {
             move(dx, dy);
             wheel(direction, amount);
         }
@@ -257,7 +255,7 @@ public class ScriptMouseObject implements MouseObject {
      */
     @Override
     public int getPressDelay() {
-        synchronized (monitor) {
+        synchronized (robot) {
             return pressDelay;
         }
     }
@@ -267,7 +265,7 @@ public class ScriptMouseObject implements MouseObject {
      */
     @Override
     public void setPressDelay(int pressDelay) {
-        synchronized (monitor) {
+        synchronized (robot) {
             if (pressDelay < 0) {
                 this.pressDelay = 0;
             } else {
@@ -281,7 +279,7 @@ public class ScriptMouseObject implements MouseObject {
      */
     @Override
     public int getReleaseDelay() {
-        synchronized (monitor) {
+        synchronized (robot) {
             return releaseDelay;
         }
     }
@@ -291,7 +289,7 @@ public class ScriptMouseObject implements MouseObject {
      */
     @Override
     public void setReleaseDelay(int releaseDelay) {
-        synchronized (monitor) {
+        synchronized (robot) {
             if (releaseDelay < 0) {
                 this.releaseDelay = 0;
             } else {
@@ -306,7 +304,7 @@ public class ScriptMouseObject implements MouseObject {
      */
     @Override
     public int getMoveDelay() {
-        synchronized (monitor) {
+        synchronized (robot) {
             return moveDelay;
         }
     }
@@ -316,7 +314,7 @@ public class ScriptMouseObject implements MouseObject {
      */
     @Override
     public void setMoveDelay(int moveDelay) {
-        synchronized (monitor) {
+        synchronized (robot) {
             if (moveDelay < 0) {
                 this.moveDelay = 0;
             } else {
@@ -327,14 +325,14 @@ public class ScriptMouseObject implements MouseObject {
 
     @Override
     public int getWheelDelay() {
-        synchronized (monitor) {
+        synchronized (robot) {
             return wheelDelay;
         }
     }
 
     @Override
     public void setWheelDelay(int wheelDelay) {
-        synchronized (monitor) {
+        synchronized (robot) {
             if (wheelDelay < 0) {
                 this.wheelDelay = 0;
             } else {
@@ -345,14 +343,14 @@ public class ScriptMouseObject implements MouseObject {
 
     @Override
     public double getMultiplier() {
-        synchronized (monitor) {
+        synchronized (robot) {
             return multiplier;
         }
     }
 
     @Override
     public void setMultiplier(double multiplier) {
-        synchronized (monitor) {
+        synchronized (robot) {
             if (multiplier < 0) {
                 this.multiplier = 0;
             } else {
@@ -363,14 +361,14 @@ public class ScriptMouseObject implements MouseObject {
 
     @Override
     public void resetMultiplier() {
-        synchronized (monitor) {
+        synchronized (robot) {
             multiplier = MULTIPLIER;
         }
     }
 
     @Override
     public double getSpeed() {
-        synchronized (monitor) {
+        synchronized (robot) {
             if (multiplier == 0) return 999999999;
             return MathUtil.roundTo1(1.0 / multiplier);
         }
@@ -378,7 +376,7 @@ public class ScriptMouseObject implements MouseObject {
 
     @Override
     public void setSpeed(double speed) {
-        synchronized (monitor) {
+        synchronized (robot) {
             if (speed < 0.1) {
                 speed = 0.1;
             }
@@ -389,14 +387,14 @@ public class ScriptMouseObject implements MouseObject {
 
     @Override
     public void resetSpeed() {
-        synchronized (monitor) {
+        synchronized (robot) {
             resetMultiplier();
         }
     }
 
     @Override
     public void setDelays(int delay) {
-        synchronized (monitor) {
+        synchronized (robot) {
             setPressDelay(delay);
             setReleaseDelay(delay);
             setMoveDelay(delay);
@@ -406,7 +404,7 @@ public class ScriptMouseObject implements MouseObject {
 
     @Override
     public void resetDelays() {
-        synchronized (monitor) {
+        synchronized (robot) {
             this.moveDelay = MOVE_DELAY;
             this.pressDelay = PRESS_DELAY;
             this.releaseDelay = RELEASE_DELAY;
@@ -417,14 +415,14 @@ public class ScriptMouseObject implements MouseObject {
 
     @Override
     public int getMinDelay() {
-        synchronized (monitor) {
+        synchronized (robot) {
             return minDelay;
         }
     }
 
     @Override
     public void setMinDelay(int minDelay) {
-        synchronized (monitor) {
+        synchronized (robot) {
             this.minDelay = minDelay;
         }
     }
@@ -437,9 +435,9 @@ public class ScriptMouseObject implements MouseObject {
      */
     @Override
     public void wheel(String direction, int amount) {
-        synchronized (monitor) {
+        synchronized (robot) {
             if (amount < 0) {
-                Out.println(String.format("Wheel amount '%s' can't be less then 0", amount));
+                Log.error("Wheel amount '%s' can't be less then 0\n", amount);
                 return;
             }
 
@@ -453,7 +451,7 @@ public class ScriptMouseObject implements MouseObject {
                     robot.delay(getMultipliedWheelDelay());
                     break;
                 default:
-                    Out.println(String.format("Wrong wheel direction '%s'", direction));
+                    Log.error("Wrong wheel direction '%s'\n", direction);
                     break;
             }
         }
@@ -461,7 +459,7 @@ public class ScriptMouseObject implements MouseObject {
     
     @Override
     public void wheelAt(String direction, int amount, int x, int y) {
-        synchronized (monitor) {
+        synchronized (robot) {
             moveTo(x, y);
             wheel(direction, amount);
         }
@@ -469,35 +467,35 @@ public class ScriptMouseObject implements MouseObject {
 
     @Override
     public int getMultipliedPressDelay() {
-        synchronized (monitor) {
+        synchronized (robot) {
             return checkDelay((int) (pressDelay * multiplier));
         }
     }
 
     @Override
     public int getMultipliedReleaseDelay() {
-        synchronized (monitor) {
+        synchronized (robot) {
             return checkDelay((int) (releaseDelay * multiplier));
         }
     }
 
     @Override
     public int getMultipliedMoveDelay() {
-        synchronized (monitor) {
+        synchronized (robot) {
             return checkDelay((int) (moveDelay * multiplier));
         }
     }
 
     @Override
     public int getMultipliedWheelDelay() {
-        synchronized (monitor) {
+        synchronized (robot) {
             return checkDelay((int) (wheelDelay * multiplier));
         }
     }
     
     // private
     private int checkDelay(int delay) {
-        synchronized (monitor) {
+        synchronized (robot) {
             if (delay < minDelay) return minDelay;
             return delay;
         }

@@ -2,7 +2,7 @@ package org.dikhim.clickauto.jsengine.objects;
 
 
 import org.dikhim.clickauto.jsengine.objects.Classes.Image;
-import org.dikhim.clickauto.util.Out;
+import org.dikhim.clickauto.util.logger.Log;
 import org.dikhim.clickauto.util.ZipBase64;
 
 import javax.imageio.ImageIO;
@@ -28,7 +28,7 @@ public class ScriptCreateObject implements CreateObject {
             InputStream is = new ByteArrayInputStream(data);
             return new Image(ImageIO.read(is));
         } catch (Exception e) {
-            Out.println("Cannot create image from the string");
+            Log.error("Cannot create image from the string");
             return null;
         }
     }
@@ -38,7 +38,7 @@ public class ScriptCreateObject implements CreateObject {
         try {
             return new Image(ImageIO.read(new File(path)));
         } catch (IOException e) {
-            Out.println("Cannot create image from filePath:"+path);
+            Log.error("Cannot create image from filePath:"+path);
             return null;
         }
     }

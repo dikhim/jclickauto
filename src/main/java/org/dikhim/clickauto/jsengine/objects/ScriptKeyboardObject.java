@@ -5,7 +5,7 @@ import org.dikhim.clickauto.jsengine.utils.KeyCodes;
 import org.dikhim.clickauto.jsengine.utils.typer.Typer;
 import org.dikhim.clickauto.jsengine.utils.typer.Typers;
 import org.dikhim.clickauto.util.MathUtil;
-import org.dikhim.clickauto.util.Out;
+import org.dikhim.clickauto.util.logger.Log;
 
 import java.util.Arrays;
 import java.util.LinkedHashSet;
@@ -25,59 +25,57 @@ public class ScriptKeyboardObject implements KeyboardObject {
     private int minDelay = MIN_DELAY;
 
 
-    private Robot robot;
-    private final Object monitor;
+    private final Robot robot;
 
     public ScriptKeyboardObject(Robot robot) {
         this.robot = robot;
-        this.monitor = robot.getMonitor();
     }
 
     @Override
     public int getMinDelay() {
-        synchronized (monitor) {
+        synchronized (robot) {
             return minDelay;
         }
     }
 
     @Override
     public int getMultipliedPressDelay() {
-        synchronized (monitor) {
+        synchronized (robot) {
             return checkDelay((int) (pressDelay * multiplier));
         }
     }
 
     @Override
     public int getMultipliedReleaseDelay() {
-        synchronized (monitor) {
+        synchronized (robot) {
             return checkDelay((int) (releaseDelay * multiplier));
         }
     }
 
     @Override
     public double getMultiplier() {
-        synchronized (monitor) {
+        synchronized (robot) {
             return multiplier;
         }
     }
 
     @Override
     public int getPressDelay() {
-        synchronized (monitor) {
+        synchronized (robot) {
             return pressDelay;
         }
     }
 
     @Override
     public int getReleaseDelay() {
-        synchronized (monitor) {
+        synchronized (robot) {
             return releaseDelay;
         }
     }
 
     @Override
     public double getSpeed() {
-        synchronized (monitor) {
+        synchronized (robot) {
             if (multiplier == 0) return 999999999;
             return MathUtil.roundTo1(1.0 / multiplier);
         }
@@ -86,7 +84,7 @@ public class ScriptKeyboardObject implements KeyboardObject {
 
     @Override
     public void perform(String keys, String action) {
-        synchronized (monitor) {
+        synchronized (robot) {
             switch (action) {
                 case "PRESS":
                     press(keys);
@@ -97,14 +95,14 @@ public class ScriptKeyboardObject implements KeyboardObject {
                 case "TYPE":
                     type(keys);
                 default:
-                    Out.println(String.format("Undefined key actions '%s' in perform method", action));
+                    Log.error("Undefined key actions '%s' in perform method\n", action);
             }
         }
     }
 
     @Override
     public void press(String keys) {
-        synchronized (monitor) {
+        synchronized (robot) {
             Set<String> keySet = new LinkedHashSet<>(Arrays.asList(keys.split(" ")));
             for (String key : keySet) {
                 int keyCode = KeyCodes.getEventCodeByName(key);
@@ -112,7 +110,7 @@ public class ScriptKeyboardObject implements KeyboardObject {
                     robot.keyPress(keyCode);
                     delay(getMultipliedPressDelay());
                 } else {
-                    Out.println(String.format("Undefined key '%s'in sequence '%s' in press method", key, keys));
+                    Log.error("Undefined key '%s'in sequence '%s' in press method\n", key, keys);
                 }
             }
         }
@@ -120,7 +118,7 @@ public class ScriptKeyboardObject implements KeyboardObject {
 
     @Override
     public void release(String keys) {
-        synchronized (monitor) {
+        synchronized (robot) {
             Set<String> keySet = new LinkedHashSet<>(Arrays.asList(keys.split(" ")));
             for (String key : keySet) {
                 int keyCode = KeyCodes.getEventCodeByName(key);
@@ -128,7 +126,7 @@ public class ScriptKeyboardObject implements KeyboardObject {
                     robot.keyRelease(keyCode);
                     delay(getMultipliedReleaseDelay());
                 } else {
-                    Out.println(String.format("Undefined key '%s' in release method", key));
+                    Log.error("Undefined key '%s' in release method\n", key);
                 }
             }
         }
@@ -136,7 +134,7 @@ public class ScriptKeyboardObject implements KeyboardObject {
 
     @Override
     public void resetDelays() {
-        synchronized (monitor) {
+        synchronized (robot) {
             this.pressDelay = PRESS_DELAY;
             this.releaseDelay = RELEASE_DELAY;
         }
@@ -144,21 +142,21 @@ public class ScriptKeyboardObject implements KeyboardObject {
 
     @Override
     public void resetMultiplier() {
-        synchronized (monitor) {
+        synchronized (robot) {
             this.multiplier = MULTIPLIER;
         }
     }
 
     @Override
     public void resetSpeed() {
-        synchronized (monitor) {
+        synchronized (robot) {
             resetMultiplier();
         }
     }
 
     @Override
     public void setDelays(int delay) {
-        synchronized (monitor) {
+        synchronized (robot) {
             setPressDelay(delay);
             setReleaseDelay(delay);
         }
@@ -166,14 +164,14 @@ public class ScriptKeyboardObject implements KeyboardObject {
 
     @Override
     public void setMinDelay(int delay) {
-        synchronized (monitor) {
+        synchronized (robot) {
             this.minDelay = delay;
         }
     }
 
     @Override
     public void setMultiplier(double multiplier) {
-        synchronized (monitor) {
+        synchronized (robot) {
             if (multiplier < 0) {
                 this.multiplier = 0;
             } else {
@@ -184,7 +182,7 @@ public class ScriptKeyboardObject implements KeyboardObject {
 
     @Override
     public void setPressDelay(int pressDelay) {
-        synchronized (monitor) {
+        synchronized (robot) {
             if (pressDelay < 0) {
                 this.pressDelay = 0;
             } else {
@@ -195,7 +193,7 @@ public class ScriptKeyboardObject implements KeyboardObject {
 
     @Override
     public void setReleaseDelay(int releaseDelay) {
-        synchronized (monitor) {
+        synchronized (robot) {
             if (releaseDelay < 0) {
                 this.releaseDelay = 0;
             } else {
@@ -206,7 +204,7 @@ public class ScriptKeyboardObject implements KeyboardObject {
 
     @Override
     public void setSpeed(double speed) {
-        synchronized (monitor) {
+        synchronized (robot) {
             if (speed < 0.1) {
                 speed = 0.1;
             }
@@ -217,7 +215,7 @@ public class ScriptKeyboardObject implements KeyboardObject {
 
     @Override
     public void type(String keys) {
-        synchronized (monitor) {
+        synchronized (robot) {
             String[] keyList = keys.split(" ");
             for (String key : keyList) {
                 int keyCode = KeyCodes.getEventCodeByName(key);
@@ -227,7 +225,7 @@ public class ScriptKeyboardObject implements KeyboardObject {
                     robot.keyRelease(keyCode);
                     delay(getMultipliedReleaseDelay());
                 } else {
-                    Out.println(String.format("Undefined key '%s' in type method", key));
+                    Log.error("Undefined key '%s' in type method\n", key);
                 }
             }
         }
@@ -239,7 +237,7 @@ public class ScriptKeyboardObject implements KeyboardObject {
             Typer typer = Typers.create(this, layout);
             typer.type(text);
         } catch (Exception e) {
-            Out.println(e.getMessage());
+            Log.error(e.getMessage()+"\n");
         }
     }
 

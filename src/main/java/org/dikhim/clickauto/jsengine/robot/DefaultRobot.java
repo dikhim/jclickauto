@@ -5,11 +5,9 @@ import java.awt.image.BufferedImage;
 
 public class DefaultRobot implements Robot {
     private java.awt.Robot robot;
-    private final Object monitor;
 
-    public DefaultRobot(java.awt.Robot robot, Object monitor) {
+    public DefaultRobot(java.awt.Robot robot) {
         this.robot = robot;
-        this.monitor = monitor;
     }
 
     @Override
@@ -80,10 +78,5 @@ public class DefaultRobot implements Robot {
     @Override
     public void waitForIdle() {
         robot.waitForIdle();
-    }
-
-    @Override
-    public Object getMonitor() {
-        return monitor;
     }
 }

@@ -34,6 +34,4 @@ public interface Robot {
     void waitForIdle();
 
     String toString();
-
-    Object getMonitor();
 }

@@ -2,13 +2,16 @@ package org.dikhim.clickauto;
 
 import org.dikhim.clickauto.jsengine.ClickAutoScriptEngine;
 import org.dikhim.clickauto.jsengine.robot.Robot;
-import org.dikhim.clickauto.jsengine.robot.RobotStatic;
+import org.dikhim.clickauto.jsengine.robot.RobotFactory;
 
-import java.util.List;
+import java.awt.*;
 import java.util.Map;
 
 public class ClickAuto {
-    private ClickAutoScriptEngine engine = new ClickAutoScriptEngine(RobotStatic.get());
+    private ClickAutoScriptEngine engine = new ClickAutoScriptEngine(RobotFactory.get());
+
+    public ClickAuto() throws AWTException {
+    }
 
     /**
      * Starts script engine. Any scripts that was putScript will be evaluated in new thread

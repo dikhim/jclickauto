@@ -4,10 +4,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class EmptyRobot implements Robot {
-    private final Object monitor;
 
-    public EmptyRobot(Object monitor) {
-        this.monitor = monitor;
+    public EmptyRobot( ) {
     }
 
     @Override
@@ -78,10 +76,5 @@ public class EmptyRobot implements Robot {
     @Override
     public void waitForIdle() {
 
-    }
-
-    @Override
-    public Object getMonitor() {
-        return monitor;
     }
 }

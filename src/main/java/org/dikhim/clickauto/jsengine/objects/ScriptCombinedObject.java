@@ -5,7 +5,7 @@ import org.dikhim.clickauto.jsengine.actions.Action;
 import org.dikhim.clickauto.jsengine.utils.ActionRunner;
 import org.dikhim.clickauto.jsengine.utils.decoders.ActionDecoder;
 import org.dikhim.clickauto.jsengine.utils.decoders.ActionDecoderFactory;
-import org.dikhim.clickauto.util.Out;
+import org.dikhim.clickauto.util.logger.Log;
 
 import java.util.List;
 
@@ -27,7 +27,7 @@ public class ScriptCombinedObject implements CombinedObject {
         try {
             actions = actionDecoder.decode(code);
         } catch (IllegalArgumentException e) {
-            Out.println(e.getMessage());
+            Log.error(e.getMessage());
             return;
         }
 

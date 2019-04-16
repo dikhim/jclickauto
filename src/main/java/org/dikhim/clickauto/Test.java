@@ -1,12 +1,5 @@
 package org.dikhim.clickauto;
 
-import org.dikhim.clickauto.jsengine.objects.ScriptSystemObject;
-import org.dikhim.clickauto.jsengine.objects.SystemObject;
-import org.dikhim.clickauto.jsengine.robot.Robot;
-import org.dikhim.clickauto.jsengine.robot.RobotStatic;
-
-import java.util.Map;
-
 public class Test {
     public static void main(String[] args) throws Exception {
         Test test = new Test();
@@ -127,7 +120,6 @@ public class Test {
         
         Thread.sleep(1000);
         clickAuto.stop();
-        
     }
     
     private void testOverriding() {

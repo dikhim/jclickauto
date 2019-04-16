@@ -3,7 +3,7 @@ package org.dikhim.clickauto.jsengine.objects;
 import org.dikhim.clickauto.jsengine.ClickAutoScriptEngine;
 import org.dikhim.clickauto.jsengine.objects.Classes.Image;
 import org.dikhim.clickauto.util.MathUtil;
-import org.dikhim.clickauto.util.Out;
+import org.dikhim.clickauto.util.logger.Log;
 import org.dikhim.clickauto.jsengine.robot.Robot;
 
 @SuppressWarnings("unused")
@@ -51,21 +51,21 @@ public class ScriptSystemObject implements SystemObject {
     @Override
     public void print(String s) {
         synchronized (robot) {
-            Out.print(s);
+            Log.out(s);
         }
     }
 
     @Override
     public void println() {
         synchronized (robot) {
-            Out.println("");
+            Log.out("\n");
         }
     }
 
     @Override
     public void println(String s) {
         synchronized (robot) {
-            Out.println(s);
+            Log.out(s + "\n");
         }
     }
 
