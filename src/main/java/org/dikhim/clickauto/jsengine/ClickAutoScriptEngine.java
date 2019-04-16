@@ -5,6 +5,8 @@ import org.dikhim.clickauto.jsengine.robot.Robot;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -91,7 +93,7 @@ public class ClickAutoScriptEngine {
     private void initScriptObjects() {
         KeyboardObject keyboardObject = new ScriptKeyboardObject(robot);
         MouseObject mouseObject = new ScriptMouseObject(robot);
-        SystemObject systemObject = new ScriptSystemObject(robot);
+        SystemObject systemObject = new ScriptSystemObject(this);
         CombinedObject combinedObject = new ScriptCombinedObject(mouseObject, keyboardObject, systemObject);
         ClipboardObject clipboardObject = new ScriptClipboardObject(robot);
         CreateObject createObject = new ScriptCreateObject();
@@ -152,5 +154,9 @@ public class ClickAutoScriptEngine {
 
     public Robot getRobot() {
         return this.robot;
+    }
+
+    public Map<String, Object> getObjects() {
+        return objects;
     }
 }

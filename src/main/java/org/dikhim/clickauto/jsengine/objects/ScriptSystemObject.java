@@ -8,28 +8,20 @@ import org.dikhim.clickauto.jsengine.robot.Robot;
 
 @SuppressWarnings("unused")
 public class ScriptSystemObject implements SystemObject {
-    private ClickAutoScriptEngine engine;
-    private Robot robot;
-    private final Object monitor;
+    protected ClickAutoScriptEngine engine;
+    protected final Robot robot;
+    protected final double MULTIPLIER = 1;
 
-    private final double MULTIPLIER = 1;
-
-    private double multiplier = MULTIPLIER;
+    protected double multiplier = MULTIPLIER;
 
     public ScriptSystemObject(ClickAutoScriptEngine engine) {
         this.engine = engine;
         this.robot = engine.getRobot();
-        this.monitor = robot.getMonitor();
-    }
-
-    public ScriptSystemObject(Robot robot) {
-        this.robot = robot;
-        this.monitor = robot.getMonitor();
     }
 
     @Override
     public int getMultipliedDelay(int ms) {
-        synchronized (monitor) {
+        synchronized (robot) {
             int result = ((int) (ms * multiplier));
             if (result <= 0) {
                 return 0;
@@ -41,14 +33,14 @@ public class ScriptSystemObject implements SystemObject {
 
     @Override
     public double getMultiplier() {
-        synchronized (monitor) {
+        synchronized (robot) {
             return multiplier;
         }
     }
 
     @Override
     public double getSpeed() {
-        synchronized (monitor) {
+        synchronized (robot) {
             if(multiplier==0) return 999999999;
             return MathUtil.roundTo1(1.0 / multiplier);
         }
@@ -58,21 +50,21 @@ public class ScriptSystemObject implements SystemObject {
 
     @Override
     public void print(String s) {
-        synchronized (monitor) {
+        synchronized (robot) {
             Out.print(s);
         }
     }
 
     @Override
     public void println() {
-        synchronized (monitor) {
+        synchronized (robot) {
             Out.println("");
         }
     }
 
     @Override
     public void println(String s) {
-        synchronized (monitor) {
+        synchronized (robot) {
             Out.println(s);
         }
     }
@@ -84,21 +76,21 @@ public class ScriptSystemObject implements SystemObject {
 
     @Override
     public void resetMultiplier() {
-        synchronized (monitor) {
+        synchronized (robot) {
             this.multiplier = MULTIPLIER;
         }
     }
 
     @Override
     public void resetSpeed() {
-        synchronized (monitor) {
+        synchronized (robot) {
             this.multiplier = MULTIPLIER;
         }
     }
 
     @Override
     public void setMultiplier(double multiplier) {
-        synchronized (monitor) {
+        synchronized (robot) {
             if (multiplier < 0) {
                 this.multiplier = 0;
             } else {
@@ -129,7 +121,7 @@ public class ScriptSystemObject implements SystemObject {
 
     @Override
     public void setSpeed(double speed) {
-        synchronized (monitor) {
+        synchronized (robot) {
             if (speed < 0.1) {
                 speed = 0.1;
             }
@@ -140,7 +132,7 @@ public class ScriptSystemObject implements SystemObject {
 
     @Override
     public void showImage(Image image) {
-        synchronized (monitor) {
+        synchronized (robot) {
             // TODO
         }
     }

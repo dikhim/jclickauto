@@ -1,16 +1,20 @@
 package org.dikhim.clickauto;
 
 import org.dikhim.clickauto.jsengine.ClickAutoScriptEngine;
+import org.dikhim.clickauto.jsengine.robot.Robot;
 import org.dikhim.clickauto.jsengine.robot.RobotStatic;
 
+import java.util.List;
+import java.util.Map;
+
 public class ClickAuto {
-    private ClickAutoScriptEngine clickAutoScriptEngine = new ClickAutoScriptEngine(RobotStatic.get());
+    private ClickAutoScriptEngine engine = new ClickAutoScriptEngine(RobotStatic.get());
 
     /**
-     * Starts script engine. Any scripts that was put will be evaluated in new thread
+     * Starts script engine. Any scripts that was putScript will be evaluated in new thread
      */
     public void start() {
-        clickAutoScriptEngine.start();
+        engine.start();
     }
 
     /**
@@ -21,30 +25,51 @@ public class ClickAuto {
      * Destroying thread may cause crash for the script engine. Especially when it called right after the start() method. Better wait at least 500ms after start() method to call stop()
      */
     public void stop() {
-        clickAutoScriptEngine.stop();
+        engine.stop();
+    }
+    
+    /**
+     * Put script into script engine. Script will be evaluated after start() method call
+     *
+     * @param script script to be evaluated
+     */
+    public void putScript(String script) {
+        engine.putScript(script);
     }
 
 
     /**
-     * Put script into script engine. Script will be evaluated after start() method call
-     * @param script script to be evaluated
+     * Puts an object to the engine<br>
+     * All public methods in object will be accessible via script "objectName.methodName()"<br>
+     * To override default object put a new one with the same name
+     *
+     * @param name   of object
+     * @param object instance
      */
-    public void put(String script) {
-        clickAutoScriptEngine.putScript(script);
+    public void putObject(String name, Object object) {
+        engine.putObject(name, object);
+    }
+
+    /**
+     * Returns a map of script objects where keys - are name of objects
+     * @return map of script objects
+     */
+    public Map<String, Object> geObjects() {
+        return engine.getObjects();
     }
 
     /**
      * Resets the script engine to default configuration<br>
      * Performs sequential calls for
      * <ul>
-     *     <li>stop the engine</li>
-     *     <li>reset script objects to default realizations (mouse, keyboard, system, clipboard, combined, thread, create)</li>
-     *     <li>remove all inserted scripts</li>
-     *     <li>reset time to wait interruption to 1000 ms</li>
-     * </ul> 
+     * <li>stop the engine</li>
+     * <li>reset script objects to default realizations (mouse, keyboard, system, clipboard, combined, thread, create)</li>
+     * <li>remove all inserted scripts</li>
+     * <li>reset time to wait interruption to 1000 ms</li>
+     * </ul>
      */
     public void reset() {
-        clickAutoScriptEngine.reset();
+        engine.reset();
     }
 
     /**
@@ -53,7 +78,7 @@ public class ClickAuto {
      * @param ms time to wait interruption in milliseconds
      */
     public void setTimeToWaitInterruption(int ms) {
-        clickAutoScriptEngine.setTimeToWaitInterruption(ms);
+        engine.setTimeToWaitInterruption(ms);
     }
 
     /**
@@ -62,7 +87,26 @@ public class ClickAuto {
      * @return time to wait interruption in milliseconds
      */
     public int getTimeToWaitInterruption() {
-        return clickAutoScriptEngine.getTimeToWaitInterruption();
+        return engine.getTimeToWaitInterruption();
     }
 
+    /**
+     * Returns an instance of the Robot object<br>
+     * Use it for your own script objects
+     *
+     * @return robot object
+     */
+    public Robot getRobot() {
+        return engine.getRobot();
+    }
+
+    /**
+     * Returns an instance of the ClickAutoScriptEngine object<br>
+     * Ii's needed for creation some specific objects like system object
+     *
+     * @return engine object
+     */
+    public ClickAutoScriptEngine getEngine() {
+        return engine;
+    }
 }

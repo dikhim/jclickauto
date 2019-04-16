@@ -1,5 +1,12 @@
 package org.dikhim.clickauto;
 
+import org.dikhim.clickauto.jsengine.objects.ScriptSystemObject;
+import org.dikhim.clickauto.jsengine.objects.SystemObject;
+import org.dikhim.clickauto.jsengine.robot.Robot;
+import org.dikhim.clickauto.jsengine.robot.RobotStatic;
+
+import java.util.Map;
+
 public class Test {
     public static void main(String[] args) throws Exception {
         Test test = new Test();
@@ -19,7 +26,7 @@ public class Test {
 //       test.testStartStopDelay(300,300);
        // test.testStartStopDelay(1000, 1000);
 //        test.testStartStop();
-        test.testInterruption();
+        test.testOverriding();
     }
 
     private ClickAuto clickAuto = new ClickAuto();
@@ -27,7 +34,7 @@ public class Test {
 
     private void testInfLoop() throws InterruptedException {
         clickAuto.reset();
-        clickAuto.put("for(;;){" +
+        clickAuto.putScript("for(;;){" +
                 "mouse.move(1,0);" +
                 "};");
         clickAuto.start();
@@ -39,7 +46,7 @@ public class Test {
 
     private void testMouseMove() throws InterruptedException {
         clickAuto.reset();
-        clickAuto.put("for(i=0;i<40;i++){" +
+        clickAuto.putScript("for(i=0;i<40;i++){" +
                 "mouse.move(0,1);" +
                 "};");
         clickAuto.start();
@@ -50,13 +57,13 @@ public class Test {
 
     private void testMultiplePut() throws InterruptedException {
         clickAuto.reset();
-        clickAuto.put("for(i=0;i<40;i++){" +
+        clickAuto.putScript("for(i=0;i<40;i++){" +
                 "mouse.move(0,1);" +
                 "};");
-        clickAuto.put("for(i=0;i<40;i++){" +
+        clickAuto.putScript("for(i=0;i<40;i++){" +
                 "mouse.move(1,0);" +
                 "};");
-        clickAuto.put("for(i=0;i<40;i++){" +
+        clickAuto.putScript("for(i=0;i<40;i++){" +
                 "mouse.move(1,1);" +
                 "};");
         clickAuto.start();
@@ -70,7 +77,7 @@ public class Test {
 
         // inf loop
         clickAuto.reset();
-        clickAuto.put("for(;;){" +
+        clickAuto.putScript("for(;;){" +
                 "mouse.move(1,0);" +
                 "};");
 
@@ -91,7 +98,7 @@ public class Test {
         System.out.println(String.format("testStartStop runMs=%s, stopMs=%s", runMs, stopMs));
         // inf loop
         clickAuto.reset();
-        clickAuto.put("for(;;){" +
+        clickAuto.putScript("for(;;){" +
                 "mouse.move(1,0);" +
                 "};");
 
@@ -110,7 +117,7 @@ public class Test {
         System.out.println("testInterruption");
         // inf loop
         clickAuto.reset();
-        clickAuto.put("for(;;){" +
+        clickAuto.putScript("for(;;){" +
                 "mouse.move(1,0);" +
                 "if(thread.interrupted()){" +
                 "mouse.moveTo(0,0);" +
@@ -121,5 +128,14 @@ public class Test {
         Thread.sleep(1000);
         clickAuto.stop();
         
+    }
+    
+    private void testOverriding() {
+        System.out.println("testOverriding");
+        clickAuto.reset();
+        MySystemObject mySystemObject = new MySystemObject(clickAuto.getEngine());
+        clickAuto.putObject("system", mySystemObject);
+        clickAuto.putScript("system.println('hello world');");
+        clickAuto.start();        
     }
 }
