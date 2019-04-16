@@ -9,18 +9,15 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class ScriptScreenObject implements ScreenObject {
-
-    private final Object monitor;
-    private final Robot robot;
+    protected final Robot robot;
 
     public ScriptScreenObject(Robot robot) {
         this.robot = robot;
-        this.monitor = robot.getMonitor();
     }
 
     @Override
     public Image getImage(int x0, int y0, int x1, int y1) {
-        synchronized (monitor) {
+        synchronized (robot) {
             Rectangle rectangle = createFitsRectangle(x0, y0, x1, y1);
             return getImage(rectangle);
         }
@@ -28,21 +25,21 @@ public class ScriptScreenObject implements ScreenObject {
 
     @Override
     public Image getImage(Point p1, Point p2) {
-        synchronized (monitor) {
+        synchronized (robot) {
             return getImage(p1.x, p1.y, p2.x, p2.y);
         }
     }
     
     @Override
     public Image getImage(Rectangle rectangle) {
-        synchronized (monitor) {
+        synchronized (robot) {
             return new Image(robot.createScreenCapture(rectangle));
         }
     }
 
     @Override
     public Image getFilledImage(int x0, int y0, int x1, int y1) {
-        synchronized (monitor) {
+        synchronized (robot) {
             Rectangle rectangle = createRectangle(x0, y0, x1, y1);
             Rectangle fitsRectangle = createFitsRectangle(x0, y0, x1, y1);
 
@@ -67,7 +64,7 @@ public class ScriptScreenObject implements ScreenObject {
 
     @Override
     public Image getFilledImage(Point p1, Point p2) {
-        synchronized (monitor) {
+        synchronized (robot) {
             return getFilledImage(p1.x, p1.y, p2.x, p2.y);
         }
     }
@@ -82,11 +79,11 @@ public class ScriptScreenObject implements ScreenObject {
         return Toolkit.getDefaultToolkit().getScreenSize().width;
     }
 
-    private Rectangle createRectangle(int x0, int y0, int x1, int y1) {
+    protected Rectangle createRectangle(int x0, int y0, int x1, int y1) {
         return ShapeUtil.createRectangle(x0, y0, x1, y1);
     }
 
-    private Rectangle createFitsRectangle(int x0, int y0, int x1, int y1) {
+    protected Rectangle createFitsRectangle(int x0, int y0, int x1, int y1) {
         if (x0 < x1 && y0 < y1 && x0 >= 0 && y0 >= 0 && x1 <= getWidth() && y1 <= getHeight())
             return ShapeUtil.createRectangle(x0, y0, x1, y1);
 

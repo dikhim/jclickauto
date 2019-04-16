@@ -7,10 +7,10 @@ import java.awt.datatransfer.*;
 import java.io.IOException;
 
 public class ScriptClipboardObject implements ClipboardObject{
-    private final Object monitor;
+    protected final Robot robot;
     
     public ScriptClipboardObject(Robot robot) {
-        this.monitor = robot.getMonitor();
+        this.robot = robot;
     }
 
     /**
@@ -21,7 +21,7 @@ public class ScriptClipboardObject implements ClipboardObject{
      */
     @Override
     public String get() {
-        synchronized (monitor) {
+        synchronized (robot) {
             String result = "";
             Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
             //odd: the Object param of getContents is not currently used
@@ -48,7 +48,7 @@ public class ScriptClipboardObject implements ClipboardObject{
      */
     @Override
     public void set(String str){
-        synchronized (monitor) {
+        synchronized (robot) {
             StringSelection stringSelection = new StringSelection(str);
             Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
             clipboard.setContents(stringSelection, null);

@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 @SuppressWarnings("unused")
 public class Image extends BufferedImage {
-    private Pixels px = new Pixels();
+    protected Pixels px = new Pixels();
 
     public Image(int width, int height, int imageType) {
         super(width, height, imageType);
@@ -151,7 +151,7 @@ public class Image extends BufferedImage {
                 .collect(Collectors.toList());
     }
 
-    private static class ColorInfo {
+    protected static class ColorInfo {
         int rgb;
         private List<Point> colorBlocks;
 
@@ -170,7 +170,7 @@ public class Image extends BufferedImage {
         }
     }
 
-    private static class Pixels {
+    protected static class Pixels {
         List<ColorInfo> pixels = new ArrayList<>();
 
         void add(int rgb, Point point) {

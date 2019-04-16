@@ -14,18 +14,18 @@ import java.util.Set;
 public class ScriptKeyboardObject implements KeyboardObject {
 
     // Constants
-    private final int PRESS_DELAY = 10;
-    private final int RELEASE_DELAY = 10;
-    private final double MULTIPLIER = 1f;
-    private final int MIN_DELAY = 5;
+    protected final int PRESS_DELAY = 10;
+    protected final int RELEASE_DELAY = 10;
+    protected final double MULTIPLIER = 1f;
+    protected final int MIN_DELAY = 5;
 
-    private int pressDelay = PRESS_DELAY;
-    private int releaseDelay = RELEASE_DELAY;
-    private double multiplier = MULTIPLIER;
-    private int minDelay = MIN_DELAY;
+    protected int pressDelay = PRESS_DELAY;
+    protected int releaseDelay = RELEASE_DELAY;
+    protected double multiplier = MULTIPLIER;
+    protected int minDelay = MIN_DELAY;
 
 
-    private final Robot robot;
+    protected final Robot robot;
 
     public ScriptKeyboardObject(Robot robot) {
         this.robot = robot;
@@ -241,13 +241,13 @@ public class ScriptKeyboardObject implements KeyboardObject {
         }
     }
 
-    private int checkDelay(int delay) {
+    protected int checkDelay(int delay) {
         if (delay < minDelay) return minDelay;
 
         return delay;
     }
 
-    private void delay(int delay) {
+    protected void delay(int delay) {
         try {
             Thread.sleep(delay);
         } catch (InterruptedException e) {

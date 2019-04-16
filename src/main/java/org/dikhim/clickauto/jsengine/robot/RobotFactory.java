@@ -30,7 +30,7 @@ public class RobotFactory {
         return robot;
     }
 
-    public static void createEmptyInstanceOnException(boolean isEmpty) {
+    public static void createEmptyInstanceOnFail(boolean isEmpty) {
         emptyInstance = isEmpty;
     }
 

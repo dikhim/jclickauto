@@ -10,9 +10,9 @@ import org.dikhim.clickauto.util.logger.Log;
 import java.util.List;
 
 public class ScriptCombinedObject implements CombinedObject {
-    private MouseObject mouseObject;
-    private KeyboardObject keyboardObject;
-    private SystemObject systemObject;
+    protected MouseObject mouseObject;
+    protected KeyboardObject keyboardObject;
+    protected SystemObject systemObject;
 
     public ScriptCombinedObject(MouseObject mouseObject, KeyboardObject keyboardObject, SystemObject systemObject) {
         this.mouseObject = mouseObject;

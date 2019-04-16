@@ -8,9 +8,10 @@ import java.awt.*;
 import java.util.Map;
 
 public class ClickAuto {
-    private ClickAutoScriptEngine engine = new ClickAutoScriptEngine(RobotFactory.get());
+    private ClickAutoScriptEngine engine;
 
     public ClickAuto() throws AWTException {
+        engine = new ClickAutoScriptEngine(RobotFactory.get());
     }
 
     /**
@@ -51,6 +52,15 @@ public class ClickAuto {
      */
     public void putObject(String name, Object object) {
         engine.putObject(name, object);
+    }
+
+    /**
+     * Returns the specified object by name
+     * @param name of object
+     * @return script object
+     */
+    public Object getObject(String name) {
+        return engine.getObjects().get(name);
     }
 
     /**

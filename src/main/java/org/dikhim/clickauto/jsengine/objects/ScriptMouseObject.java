@@ -11,22 +11,22 @@ import java.awt.*;
 public class ScriptMouseObject implements MouseObject {
 
     // Constants
-    private final int PRESS_DELAY = 10;
-    private final int RELEASE_DELAY = 10;
-    private final int MOVE_DELAY = 10;
-    private final int WHEEL_DELAY = 10;
-    private final float MULTIPLIER = 1;
-    private final int MIN_DELAY = 5;
+    protected final int PRESS_DELAY = 10;
+    protected final int RELEASE_DELAY = 10;
+    protected final int MOVE_DELAY = 10;
+    protected final int WHEEL_DELAY = 10;
+    protected final float MULTIPLIER = 1;
+    protected final int MIN_DELAY = 5;
 
-    private int pressDelay = PRESS_DELAY;
-    private int releaseDelay = RELEASE_DELAY;
-    private int moveDelay = MOVE_DELAY;
-    private int wheelDelay = WHEEL_DELAY;
-    private double multiplier = MULTIPLIER;
-    private int minDelay = MIN_DELAY;
+    protected int pressDelay = PRESS_DELAY;
+    protected int releaseDelay = RELEASE_DELAY;
+    protected int moveDelay = MOVE_DELAY;
+    protected int wheelDelay = WHEEL_DELAY;
+    protected double multiplier = MULTIPLIER;
+    protected int minDelay = MIN_DELAY;
 
 
-    private final Robot robot;
+    protected final Robot robot;
 
     public ScriptMouseObject(Robot robot) {
         this.robot = robot;
@@ -494,14 +494,14 @@ public class ScriptMouseObject implements MouseObject {
     }
     
     // private
-    private int checkDelay(int delay) {
+    protected int checkDelay(int delay) {
         synchronized (robot) {
             if (delay < minDelay) return minDelay;
             return delay;
         }
     }
 
-    private void delay(int delay) {
+    protected void delay(int delay) {
         try {
             Thread.sleep(delay);
         } catch (InterruptedException e) {

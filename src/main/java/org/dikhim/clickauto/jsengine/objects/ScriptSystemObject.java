@@ -6,7 +6,6 @@ import org.dikhim.clickauto.util.MathUtil;
 import org.dikhim.clickauto.util.logger.Log;
 import org.dikhim.clickauto.jsengine.robot.Robot;
 
-@SuppressWarnings("unused")
 public class ScriptSystemObject implements SystemObject {
     protected ClickAutoScriptEngine engine;
     protected final Robot robot;
