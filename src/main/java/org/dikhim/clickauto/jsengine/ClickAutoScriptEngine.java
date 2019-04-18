@@ -3,10 +3,7 @@ package org.dikhim.clickauto.jsengine;
 import org.dikhim.clickauto.jsengine.objects.*;
 import org.dikhim.clickauto.jsengine.robot.Robot;
 
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
+import javax.script.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,9 +13,10 @@ public class ClickAutoScriptEngine {
 
     private final Robot robot;
     private ScriptEngine engine;
+    private ScriptContext context;
     private MethodInvoker methodInvoker;
     private Thread thread;
-    private final static int TIME_TO_WAIT_INTERRUPTION =1000;
+    private final static int TIME_TO_WAIT_INTERRUPTION = 1000;
     private int timeToWaitInterruption = TIME_TO_WAIT_INTERRUPTION;
 
     public ClickAutoScriptEngine(Robot robot) {
@@ -28,16 +26,18 @@ public class ClickAutoScriptEngine {
         initScriptObjects();
     }
 
-    // On start run all scripts in new thread
-    public void start() {
+    /**
+     * Runs all scripts in now context
+     */
+    public void run() {
+        waitAllThredsEnd();
         runInNewThread(() ->
         {
-            engine = new ScriptEngineManager().getEngineByName("nashorn");
-            methodInvoker = new MethodInvoker(engine);
-            loadScriptObjects();
+            resetContext();
+            objects.forEach((name, object) -> context.setAttribute(name, object, ScriptContext.ENGINE_SCOPE));
             try {
                 for (String s : scripts) {
-                    engine.eval(s);
+                    engine.eval(s, context);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -48,14 +48,11 @@ public class ClickAutoScriptEngine {
     /**
      * Stops the engine
      */
-    @SuppressWarnings("deprecation")
     public void stop() {
         try {
             if (thread != null) {
                 thread.interrupt();
-                System.out.println("interrupt" + thread.getName());
                 thread.join(timeToWaitInterruption);
-                System.out.println("waitComplete");
                 if (thread.isAlive()) {
                     try {
                         thread.stop();
@@ -77,19 +74,20 @@ public class ClickAutoScriptEngine {
     private List<String> scripts = new ArrayList<>();
 
     public void putScript(String script) {
+        waitMainThreadEnd();
         scripts.add(script);
     }
 
     private Map<String, Object> objects = new HashMap<>();
 
     public void putObject(String name, Object object) {
+        waitMainThreadEnd();
         objects.put(name, object);
     }
 
 
     private Map<String, Object> defaultObjects = new HashMap<>();
-    private boolean interrupted = false;
-
+    
     private void initScriptObjects() {
         KeyboardObject keyboardObject = new ScriptKeyboardObject(robot);
         MouseObject mouseObject = new ScriptMouseObject(robot);
@@ -120,7 +118,8 @@ public class ClickAutoScriptEngine {
 
 
     public void invokeFunction(String name, Object... args) {
-        methodInvoker.invokeMethod(name, args);
+        waitMainThreadEnd();
+        methodInvoker.invokeMethod(name,args);
     }
 
     public void registerInvocableMethod(String name, int maxNumberOfThreads) {
@@ -128,20 +127,35 @@ public class ClickAutoScriptEngine {
     }
 
     public void removeScripts() {
+        waitMainThreadEnd();
         scripts.clear();
     }
 
     public void removeObjects() {
+        waitMainThreadEnd();
         objects.clear();
         objects.putAll(defaultObjects);
     }
 
 
+    /**
+     * Full reset
+     */
     public void reset() {
         stop();
         removeObjects();
         removeScripts();
         timeToWaitInterruption = TIME_TO_WAIT_INTERRUPTION;
+    }
+
+    /**
+     * Reset context. All as it was before, but new one
+     */
+
+    private void resetContext() {
+        context = new SimpleScriptContext();
+        context.setBindings(engine.createBindings(), ScriptContext.GLOBAL_SCOPE);
+        engine.setContext(context);
     }
 
     public int getTimeToWaitInterruption() {
@@ -158,5 +172,24 @@ public class ClickAutoScriptEngine {
 
     public Map<String, Object> getObjects() {
         return objects;
+    }
+
+
+    private void waitMainThreadEnd() {
+        try {
+            while (thread != null && thread.isAlive()) {
+                thread.join(100);
+            }
+        } catch (InterruptedException ignored) {
+        }
+    }
+
+    private void waitAllThredsEnd() {
+        try {
+            while (thread != null && thread.isAlive() || methodInvoker.hasAliveThreads()) {
+                Thread.sleep(100);
+            }
+        } catch (InterruptedException ignored) {
+        }
     }
 }

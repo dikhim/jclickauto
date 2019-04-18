@@ -12,20 +12,17 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class ScriptKeyboardObject implements KeyboardObject {
-
-    // Constants
     protected final int PRESS_DELAY = 10;
     protected final int RELEASE_DELAY = 10;
     protected final double MULTIPLIER = 1f;
     protected final int MIN_DELAY = 5;
 
-    protected int pressDelay = PRESS_DELAY;
-    protected int releaseDelay = RELEASE_DELAY;
-    protected double multiplier = MULTIPLIER;
-    protected int minDelay = MIN_DELAY;
-
-
     protected final Robot robot;
+    
+    protected volatile int pressDelay = PRESS_DELAY;
+    protected volatile int releaseDelay = RELEASE_DELAY;
+    protected volatile double multiplier = MULTIPLIER;
+    protected volatile int minDelay = MIN_DELAY;
 
     public ScriptKeyboardObject(Robot robot) {
         this.robot = robot;

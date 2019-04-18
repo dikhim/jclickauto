@@ -7,11 +7,12 @@ import org.dikhim.clickauto.util.logger.Log;
 import org.dikhim.clickauto.jsengine.robot.Robot;
 
 public class ScriptSystemObject implements SystemObject {
-    protected ClickAutoScriptEngine engine;
-    protected final Robot robot;
     protected final double MULTIPLIER = 1;
+    
+    protected final ClickAutoScriptEngine engine;
+    protected final Robot robot;
 
-    protected double multiplier = MULTIPLIER;
+    protected volatile double multiplier = MULTIPLIER;
 
     public ScriptSystemObject(ClickAutoScriptEngine engine) {
         this.engine = engine;
@@ -45,8 +46,6 @@ public class ScriptSystemObject implements SystemObject {
         }
     }
 
-
-
     @Override
     public void print(String s) {
         synchronized (robot) {
@@ -66,11 +65,6 @@ public class ScriptSystemObject implements SystemObject {
         synchronized (robot) {
             Log.out(s + "\n");
         }
-    }
-
-    @Override
-    public void setMaxThreads(String name, int maxThreads) {
-        engine.registerInvocableMethod(name, maxThreads);
     }
 
     @Override

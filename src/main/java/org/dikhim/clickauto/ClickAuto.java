@@ -18,7 +18,7 @@ public class ClickAuto {
      * Starts script engine. Any scripts that was putScript will be evaluated in new thread
      */
     public void start() {
-        engine.start();
+        engine.run();
     }
 
     /**
@@ -26,14 +26,14 @@ public class ClickAuto {
      * Status of thread may be checked by thread.interrupted() method<br>
      * The interrupt request should be proceed by script to do all necessary operations to complete the script.<br>
      * If after interrupt request thread is still alive, than it will be destroyed<br>
-     * Destroying thread may cause crash for the script engine. Especially when it called right after the start() method. Better wait at least 500ms after start() method to call stop()
+     * Destroying thread may cause crash for the script engine. Especially when it called right after the run() method. Better wait at least 500ms after run() method to call stop()
      */
     public void stop() {
         engine.stop();
     }
     
     /**
-     * Put script into script engine. Script will be evaluated after start() method call
+     * Put script into script engine. Script will be evaluated after run() method call
      *
      * @param script script to be evaluated
      */
@@ -84,7 +84,19 @@ public class ClickAuto {
     public void reset() {
         engine.reset();
     }
+    
+    public void removeScripts() {
+        engine.removeScripts();
+    }
+    
+    public void removeObjects() {
+        engine.removeObjects();
+    }
 
+    public void invoke(String name, Object... ars) {
+        engine.invokeFunction(name,ars);
+    }
+    
     /**
      * When stop method is called it sends an interruption request to threads and waits specified amount of time. After that time threads will be destroyed
      *

@@ -3,9 +3,7 @@ package org.dikhim.clickauto.jsengine.objects;
 
 import org.dikhim.clickauto.jsengine.objects.Classes.Image;
 
-@SuppressWarnings("unused")
 public interface SystemObject {
-    
     int getMultipliedDelay(int delay);
 
     double getMultiplier();
@@ -17,8 +15,6 @@ public interface SystemObject {
     void println();
     
     void println(String s);
-
-    void setMaxThreads(String name, int maxThreads);
     
     void resetMultiplier();
 

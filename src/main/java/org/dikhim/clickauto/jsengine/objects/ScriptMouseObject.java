@@ -9,8 +9,6 @@ import org.dikhim.clickauto.util.logger.Log;
 import java.awt.*;
 
 public class ScriptMouseObject implements MouseObject {
-
-    // Constants
     protected final int PRESS_DELAY = 10;
     protected final int RELEASE_DELAY = 10;
     protected final int MOVE_DELAY = 10;
@@ -18,15 +16,14 @@ public class ScriptMouseObject implements MouseObject {
     protected final float MULTIPLIER = 1;
     protected final int MIN_DELAY = 5;
 
-    protected int pressDelay = PRESS_DELAY;
-    protected int releaseDelay = RELEASE_DELAY;
-    protected int moveDelay = MOVE_DELAY;
-    protected int wheelDelay = WHEEL_DELAY;
-    protected double multiplier = MULTIPLIER;
-    protected int minDelay = MIN_DELAY;
-
-
     protected final Robot robot;
+    
+    protected volatile int pressDelay = PRESS_DELAY;
+    protected volatile int releaseDelay = RELEASE_DELAY;
+    protected volatile int moveDelay = MOVE_DELAY;
+    protected volatile int wheelDelay = WHEEL_DELAY;
+    protected volatile double multiplier = MULTIPLIER;
+    protected volatile int minDelay = MIN_DELAY;
 
     public ScriptMouseObject(Robot robot) {
         this.robot = robot;

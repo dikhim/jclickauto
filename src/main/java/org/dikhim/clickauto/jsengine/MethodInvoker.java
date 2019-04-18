@@ -44,8 +44,9 @@ class MethodInvoker {
                 try {
                     invocable.invokeFunction(name, args);
                 } catch (ScriptException | NoSuchMethodException e) {
-                    Log.error(e.getMessage()+"\n");
+                    Log.error(e.getMessage() + "\n");
                 } finally {
+                    threads.remove(Thread.currentThread());
                     lock.unlock();
                 }
             });
@@ -54,7 +55,6 @@ class MethodInvoker {
         }
     }
 
-    @SuppressWarnings("deprecation")
     void stop() {
         threads.removeIf(t -> {
             try {
@@ -65,6 +65,9 @@ class MethodInvoker {
         });
     }
 
+    public boolean hasAliveThreads() {
+        return threads.size() > 0;
+    }
 
     private class Lock {
         private volatile int currentNumber;

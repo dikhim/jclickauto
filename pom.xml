@@ -5,12 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.github.dikhim</groupId>
-    <artifactId>click-auto</artifactId>
+    <artifactId>jclickauto</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
     <name>Clicks automation</name>
     <description>Java script interpretation around Robot class</description>
-    <url>github.com/dikhim/clickauto</url>
+    <url>github.com/dikhim/jclickauto</url>
 
     <licenses>
         <license>
@@ -20,7 +20,7 @@
         </license>
     </licenses>
     <scm>
-        <url>scm:git://github.com/dikhim/clickauto</url>
+        <url>scm:git://github.com/dikhim/jclickauto</url>
     </scm>
 
     <distributionManagement>

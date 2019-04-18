@@ -1,6 +1,5 @@
 package org.dikhim.clickauto.jsengine.objects;
 
-@SuppressWarnings("unused")
 public interface KeyboardObject {
     // G
     int getMinDelay();
