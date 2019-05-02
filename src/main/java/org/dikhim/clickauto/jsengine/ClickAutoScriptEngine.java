@@ -1,13 +1,14 @@
 package org.dikhim.clickauto.jsengine;
 
-import org.dikhim.clickauto.jsengine.objects.*;
+import org.dikhim.clickauto.jsengine.objects.ObjectContainer;
 import org.dikhim.clickauto.jsengine.robot.Robot;
 
-import javax.script.*;
+import javax.script.ScriptContext;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.SimpleScriptContext;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class ClickAutoScriptEngine {
 
@@ -18,23 +19,24 @@ public class ClickAutoScriptEngine {
     private Thread thread;
     private final static int TIME_TO_WAIT_INTERRUPTION = 1000;
     private int timeToWaitInterruption = TIME_TO_WAIT_INTERRUPTION;
+    private volatile ObjectContainer objectContainer;
 
     public ClickAutoScriptEngine(Robot robot) {
         this.robot = robot;
         engine = new ScriptEngineManager().getEngineByName("nashorn");
         methodInvoker = new MethodInvoker(engine);
-        initScriptObjects();
+        objectContainer = new ObjectContainer(this);
     }
 
     /**
      * Runs all scripts in now context
      */
-    public void run() {
+    public void start() {
         waitAllThredsEnd();
         runInNewThread(() ->
         {
             resetContext();
-            objects.forEach((name, object) -> context.setAttribute(name, object, ScriptContext.ENGINE_SCOPE));
+            objectContainer.getObjects().forEach((name, object) -> context.setAttribute(name, object, ScriptContext.ENGINE_SCOPE));
             try {
                 for (String s : scripts) {
                     engine.eval(s, context);
@@ -78,37 +80,10 @@ public class ClickAutoScriptEngine {
         scripts.add(script);
     }
 
-    private Map<String, Object> objects = new HashMap<>();
 
     public void putObject(String name, Object object) {
         waitMainThreadEnd();
-        objects.put(name, object);
-    }
-
-
-    private Map<String, Object> defaultObjects = new HashMap<>();
-    
-    private void initScriptObjects() {
-        KeyboardObject keyboardObject = new ScriptKeyboardObject(robot);
-        MouseObject mouseObject = new ScriptMouseObject(robot);
-        SystemObject systemObject = new ScriptSystemObject(this);
-        CombinedObject combinedObject = new ScriptCombinedObject(mouseObject, keyboardObject, systemObject);
-        ClipboardObject clipboardObject = new ScriptClipboardObject(robot);
-        CreateObject createObject = new ScriptCreateObject();
-        ThreadObject threadObject = new ScriptThreadObject();
-        defaultObjects.clear();
-        defaultObjects.put("key", keyboardObject);
-        defaultObjects.put("mouse", mouseObject);
-        defaultObjects.put("system", systemObject);
-        defaultObjects.put("combined", combinedObject);
-        defaultObjects.put("clipboard", clipboardObject);
-        defaultObjects.put("create", createObject);
-        defaultObjects.put("thread", threadObject);
-        objects.putAll(defaultObjects);
-    }
-
-    private void loadScriptObjects() {
-        objects.forEach((name, object) -> engine.put(name, object));
+        objectContainer.put(name, object);
     }
 
     private void runInNewThread(Runnable runnable) {
@@ -133,8 +108,7 @@ public class ClickAutoScriptEngine {
 
     public void removeObjects() {
         waitMainThreadEnd();
-        objects.clear();
-        objects.putAll(defaultObjects);
+        objectContainer.resetToDefault();
     }
 
 
@@ -170,12 +144,15 @@ public class ClickAutoScriptEngine {
         return this.robot;
     }
 
-    public Map<String, Object> getObjects() {
-        return objects;
+    public ObjectContainer getObjectContainer() {
+        return objectContainer;
     }
 
+    public void setObjectContainer(ObjectContainer objectContainer) {
+        this.objectContainer = objectContainer;
+    }
 
-    private void waitMainThreadEnd() {
+    public void waitMainThreadEnd() {
         try {
             while (thread != null && thread.isAlive()) {
                 thread.join(100);
@@ -184,7 +161,7 @@ public class ClickAutoScriptEngine {
         }
     }
 
-    private void waitAllThredsEnd() {
+    public void waitAllThredsEnd() {
         try {
             while (thread != null && thread.isAlive() || methodInvoker.hasAliveThreads()) {
                 Thread.sleep(100);
@@ -192,4 +169,6 @@ public class ClickAutoScriptEngine {
         } catch (InterruptedException ignored) {
         }
     }
+    
+    
 }

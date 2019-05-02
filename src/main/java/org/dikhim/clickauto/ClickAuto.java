@@ -1,6 +1,7 @@
 package org.dikhim.clickauto;
 
 import org.dikhim.clickauto.jsengine.ClickAutoScriptEngine;
+import org.dikhim.clickauto.jsengine.objects.ObjectContainer;
 import org.dikhim.clickauto.jsengine.robot.Robot;
 import org.dikhim.clickauto.jsengine.robot.RobotFactory;
 
@@ -18,7 +19,7 @@ public class ClickAuto {
      * Starts script engine. Any scripts that was putScript will be evaluated in new thread
      */
     public void start() {
-        engine.run();
+        engine.start();
     }
 
     /**
@@ -26,49 +27,37 @@ public class ClickAuto {
      * Status of thread may be checked by thread.interrupted() method<br>
      * The interrupt request should be proceed by script to do all necessary operations to complete the script.<br>
      * If after interrupt request thread is still alive, than it will be destroyed<br>
-     * Destroying thread may cause crash for the script engine. Especially when it called right after the run() method. Better wait at least 500ms after run() method to call stop()
+     * Destroying thread may cause crash for the script engine. Especially when it called right after the start() method. Better wait at least 500ms after start() method to call stop()
      */
     public void stop() {
         engine.stop();
     }
-    
+
     /**
-     * Put script into script engine. Script will be evaluated after run() method call
+     * Put script into script engine. Script will be evaluated after start() method call
      *
      * @param script script to be evaluated
      */
     public void putScript(String script) {
         engine.putScript(script);
     }
-
+    
 
     /**
-     * Puts an object to the engine<br>
-     * All public methods in object will be accessible via script "objectName.methodName()"<br>
-     * To override default object put a new one with the same name
+     * Returns a container of script objects 
      *
-     * @param name   of object
-     * @param object instance
+     * @return a container for script objects
      */
-    public void putObject(String name, Object object) {
-        engine.putObject(name, object);
+    public ObjectContainer objectContainer() {
+        return engine.getObjectContainer();
     }
 
     /**
-     * Returns the specified object by name
-     * @param name of object
-     * @return script object
+     * Sets the object container
+     * @param objectContainer the instance of ObjectContainer
      */
-    public Object getObject(String name) {
-        return engine.getObjects().get(name);
-    }
-
-    /**
-     * Returns a map of script objects where keys - are name of objects
-     * @return map of script objects
-     */
-    public Map<String, Object> geObjects() {
-        return engine.getObjects();
+    public void setObjectContainer(ObjectContainer objectContainer) {
+        engine.setObjectContainer(objectContainer);
     }
 
     /**
@@ -84,19 +73,33 @@ public class ClickAuto {
     public void reset() {
         engine.reset();
     }
-    
+
+
+    /**
+     * Removes all user scripts
+     */
     public void removeScripts() {
         engine.removeScripts();
     }
-    
+
+    /**
+     * Removes all user objects
+     */
     public void removeObjects() {
         engine.removeObjects();
     }
-
-    public void invoke(String name, Object... ars) {
-        engine.invokeFunction(name,ars);
-    }
     
+
+    /**
+     * Invokes a function by name
+     *
+     * @param name - function name that should be called
+     * @param ars  - function parameters
+     */
+    public void callFunction(String name, Object... ars) {
+        engine.invokeFunction(name, ars);
+    }
+
     /**
      * When stop method is called it sends an interruption request to threads and waits specified amount of time. After that time threads will be destroyed
      *
@@ -121,7 +124,7 @@ public class ClickAuto {
      *
      * @return robot object
      */
-    public Robot getRobot() {
+    public Robot robot() {
         return engine.getRobot();
     }
 
@@ -133,5 +136,13 @@ public class ClickAuto {
      */
     public ClickAutoScriptEngine getEngine() {
         return engine;
+    }
+    
+    public void waitEvaluationComplete() {
+        engine.waitMainThreadEnd();
+    }
+    
+    public void waitAllThreadsEnd() {
+        engine.waitAllThredsEnd();
     }
 }

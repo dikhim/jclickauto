@@ -122,11 +122,4 @@ public class ScriptSystemObject implements SystemObject {
             setMultiplier(1f / speed);
         }
     }
-
-    @Override
-    public void showImage(Image image) {
-        synchronized (robot) {
-            // TODO
-        }
-    }
 }
