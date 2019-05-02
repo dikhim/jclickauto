@@ -6,10 +6,10 @@
 
     <groupId>io.github.dikhim</groupId>
     <artifactId>jclickauto</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
     <packaging>jar</packaging>
     <name>Clicks automation</name>
-    <description>Java script interpretation around Robot class</description>
+    <description>Java script engine around Robot class</description>
     <url>github.com/dikhim/jclickauto</url>
 
     <licenses>
