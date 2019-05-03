@@ -32,7 +32,7 @@ public class ClickAutoScriptEngine {
      * Runs all scripts in now context
      */
     public void start() {
-        waitAllThredsEnd();
+        waitAllThreadsEnd();
         runInNewThread(() ->
         {
             resetContext();
@@ -63,10 +63,7 @@ public class ClickAutoScriptEngine {
                 }
                 thread = null;
             }
-            if (methodInvoker != null) {
-                methodInvoker.stop();
-                methodInvoker = null;
-            }
+                methodInvoker.clear();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -161,9 +158,9 @@ public class ClickAutoScriptEngine {
         }
     }
 
-    public void waitAllThredsEnd() {
+    public void waitAllThreadsEnd() {
         try {
-            while (thread != null && thread.isAlive() || methodInvoker.hasAliveThreads()) {
+            while (thread != null && thread.isAlive() ||methodInvoker.hasAliveThreads()) {
                 Thread.sleep(100);
             }
         } catch (InterruptedException ignored) {

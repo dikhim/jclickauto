@@ -104,4 +104,9 @@ class MethodInvoker {
             }
         }
     }
+
+    public void clear() {
+        stop();
+        invocableMethods.clear();
+    }
 }

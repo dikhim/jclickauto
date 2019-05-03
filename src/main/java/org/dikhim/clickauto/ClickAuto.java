@@ -6,7 +6,6 @@ import org.dikhim.clickauto.jsengine.robot.Robot;
 import org.dikhim.clickauto.jsengine.robot.RobotFactory;
 
 import java.awt.*;
-import java.util.Map;
 
 public class ClickAuto {
     private ClickAutoScriptEngine engine;
@@ -143,6 +142,6 @@ public class ClickAuto {
     }
     
     public void waitAllThreadsEnd() {
-        engine.waitAllThredsEnd();
+        engine.waitAllThreadsEnd();
     }
 }
