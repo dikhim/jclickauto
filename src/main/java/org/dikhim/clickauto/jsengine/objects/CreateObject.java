@@ -1,5 +1,8 @@
 package org.dikhim.clickauto.jsengine.objects;
 
+
+import org.dikhim.clickauto.jsengine.objects.Classes.Image;
+
 import java.awt.*;
 
 public interface CreateObject {
