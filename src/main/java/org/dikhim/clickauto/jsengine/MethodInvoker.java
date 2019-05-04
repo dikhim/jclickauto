@@ -1,7 +1,8 @@
 package org.dikhim.clickauto.jsengine;
 
 
-import org.dikhim.clickauto.util.logger.Log;
+
+import org.dikhim.clickauto.util.logger.ClickAutoLog;
 
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
@@ -44,7 +45,7 @@ class MethodInvoker {
                 try {
                     invocable.invokeFunction(name, args);
                 } catch (ScriptException | NoSuchMethodException e) {
-                    Log.error(e.getMessage() + "\n");
+                    ClickAutoLog.get().error(e.getMessage() + "\n");
                 } finally {
                     threads.remove(Thread.currentThread());
                     lock.unlock();

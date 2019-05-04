@@ -1,7 +1,7 @@
 package org.dikhim.clickauto.jsengine.robot;
 
 
-import org.dikhim.clickauto.util.logger.Log;
+import org.dikhim.clickauto.util.logger.ClickAutoLog;
 
 import java.awt.*;
 
@@ -18,8 +18,8 @@ public class RobotFactory {
             java.awt.Robot awtRobot = new java.awt.Robot();
             robotTemp = new DefaultRobot(awtRobot);
         } catch (AWTException e) {
-            Log.error("Cannot create 'Robot' object. Cause:" + e.getMessage());
-            Log.error("Keyboard and mouse control will be unavailable");
+            ClickAutoLog.get().error("Cannot create 'Robot' object. Cause:" + e.getMessage());
+            ClickAutoLog.get().error("Keyboard and mouse control will be unavailable");
             if (emptyInstance) {
                 robotTemp = new EmptyRobot();
             } else {

@@ -1,9 +1,8 @@
 package org.dikhim.clickauto.jsengine.objects;
 
 import org.dikhim.clickauto.jsengine.ClickAutoScriptEngine;
-import org.dikhim.clickauto.jsengine.objects.Classes.Image;
 import org.dikhim.clickauto.util.MathUtil;
-import org.dikhim.clickauto.util.logger.Log;
+import org.dikhim.clickauto.util.logger.ClickAutoLog;
 import org.dikhim.clickauto.jsengine.robot.Robot;
 
 public class ScriptSystemObject implements SystemObject {
@@ -49,21 +48,21 @@ public class ScriptSystemObject implements SystemObject {
     @Override
     public void print(String s) {
         synchronized (robot) {
-            Log.out(s);
+            ClickAutoLog.get().get().out(s);
         }
     }
 
     @Override
     public void println() {
         synchronized (robot) {
-            Log.out("\n");
+            ClickAutoLog.get().get().out("\n");
         }
     }
 
     @Override
     public void println(String s) {
         synchronized (robot) {
-            Log.out(s + "\n");
+            ClickAutoLog.get().get().out(s + "\n");
         }
     }
 

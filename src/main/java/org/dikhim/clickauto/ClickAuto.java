@@ -4,6 +4,7 @@ import org.dikhim.clickauto.jsengine.ClickAutoScriptEngine;
 import org.dikhim.clickauto.jsengine.objects.ObjectContainer;
 import org.dikhim.clickauto.jsengine.robot.Robot;
 import org.dikhim.clickauto.jsengine.robot.RobotFactory;
+import org.dikhim.clickauto.util.logger.ClickAutoLog;
 
 import java.awt.*;
 
@@ -140,8 +141,12 @@ public class ClickAuto {
     public void waitEvaluationComplete() {
         engine.waitMainThreadEnd();
     }
-    
+
     public void waitAllThreadsEnd() {
         engine.waitAllThreadsEnd();
+    }
+
+    public static ClickAutoLog getLogger() {
+        return ClickAutoLog.get();
     }
 }

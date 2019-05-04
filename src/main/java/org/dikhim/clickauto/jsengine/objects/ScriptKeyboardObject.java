@@ -5,7 +5,7 @@ import org.dikhim.clickauto.jsengine.utils.KeyCodes;
 import org.dikhim.clickauto.jsengine.utils.typer.Typer;
 import org.dikhim.clickauto.jsengine.utils.typer.Typers;
 import org.dikhim.clickauto.util.MathUtil;
-import org.dikhim.clickauto.util.logger.Log;
+import org.dikhim.clickauto.util.logger.ClickAutoLog;
 
 import java.util.Arrays;
 import java.util.LinkedHashSet;
@@ -92,7 +92,7 @@ public class ScriptKeyboardObject implements KeyboardObject {
                 case "TYPE":
                     type(keys);
                 default:
-                    Log.error("Undefined key actions '%s' in perform method\n", action);
+                    ClickAutoLog.get().error("Undefined key actions '%s' in perform method\n", action);
             }
         }
     }
@@ -107,7 +107,7 @@ public class ScriptKeyboardObject implements KeyboardObject {
                     robot.keyPress(keyCode);
                     delay(getMultipliedPressDelay());
                 } else {
-                    Log.error("Undefined key '%s'in sequence '%s' in press method\n", key, keys);
+                    ClickAutoLog.get().error("Undefined key '%s'in sequence '%s' in press method\n", key, keys);
                 }
             }
         }
@@ -123,7 +123,7 @@ public class ScriptKeyboardObject implements KeyboardObject {
                     robot.keyRelease(keyCode);
                     delay(getMultipliedReleaseDelay());
                 } else {
-                    Log.error("Undefined key '%s' in release method\n", key);
+                    ClickAutoLog.get().error("Undefined key '%s' in release method\n", key);
                 }
             }
         }
@@ -222,7 +222,7 @@ public class ScriptKeyboardObject implements KeyboardObject {
                     robot.keyRelease(keyCode);
                     delay(getMultipliedReleaseDelay());
                 } else {
-                    Log.error("Undefined key '%s' in type method\n", key);
+                    ClickAutoLog.get().error("Undefined key '%s' in type method\n", key);
                 }
             }
         }
@@ -234,7 +234,7 @@ public class ScriptKeyboardObject implements KeyboardObject {
             Typer typer = Typers.create(this, layout);
             typer.type(text);
         } catch (Exception e) {
-            Log.error(e.getMessage()+"\n");
+            ClickAutoLog.get().error(e.getMessage()+"\n");
         }
     }
 

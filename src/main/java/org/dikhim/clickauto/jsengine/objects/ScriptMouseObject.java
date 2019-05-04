@@ -4,7 +4,7 @@ package org.dikhim.clickauto.jsengine.objects;
 import org.dikhim.clickauto.jsengine.robot.Robot;
 import org.dikhim.clickauto.jsengine.utils.MouseCodes;
 import org.dikhim.clickauto.util.MathUtil;
-import org.dikhim.clickauto.util.logger.Log;
+import org.dikhim.clickauto.util.logger.ClickAutoLog;
 
 import java.awt.*;
 
@@ -58,7 +58,7 @@ public class ScriptMouseObject implements MouseObject {
                     click(button);
                     break;
                 default:
-                    Log.error("Undefined mouse actions '%s' in button method", action);
+                    ClickAutoLog.get().error("Undefined mouse actions '%s' in button method", action);
             }
         }
     }
@@ -92,7 +92,7 @@ public class ScriptMouseObject implements MouseObject {
     public void moveTo(int x, int y) {
         synchronized (robot) {
             if (x < 0 || y < 0) {
-                Log.error("Negative coordinates '%s,%s' at moveTo method\n", x, y);
+                ClickAutoLog.get().error("Negative coordinates '%s,%s' at moveTo method\n", x, y);
                 return;
             }
             robot.mouseMove(x, y);
@@ -104,7 +104,7 @@ public class ScriptMouseObject implements MouseObject {
     public void setX(int x) {
         synchronized (robot) {
             if (x < 0) {
-                Log.error("Negative coordinate '%s' at setX method\n", x);
+                ClickAutoLog.get().error("Negative coordinate '%s' at setX method\n", x);
                 return;
             }
             robot.mouseMove(x, getY());
@@ -116,7 +116,7 @@ public class ScriptMouseObject implements MouseObject {
     public void setY(int y) {
         synchronized (robot) {
             if (y < 0) {
-                Log.error("Negative coordinate '%s' at setY method\n", y);
+                ClickAutoLog.get().error("Negative coordinate '%s' at setY method\n", y);
                 return;
             }
             robot.mouseMove(getX(), y);
@@ -138,7 +138,7 @@ public class ScriptMouseObject implements MouseObject {
             for (String btn : buttonList) {
                 int buttonEventCode = MouseCodes.getEventCodeByName(btn);
                 if (buttonEventCode == -1) {
-                    Log.error("Undefined mouse button '%s' in click method\n", btn);
+                    ClickAutoLog.get().error("Undefined mouse button '%s' in click method\n", btn);
                     return;
                 }
                 robot.mousePress(buttonEventCode);
@@ -177,7 +177,7 @@ public class ScriptMouseObject implements MouseObject {
         synchronized (robot) {
             int buttonEventCode = MouseCodes.getEventCodeByName(button);
             if (buttonEventCode == -1) {
-                Log.error("Undefined mouse button '%s' in press method\n", button);
+                ClickAutoLog.get().error("Undefined mouse button '%s' in press method\n", button);
                 return;
             }
             robot.mousePress(buttonEventCode);
@@ -213,7 +213,7 @@ public class ScriptMouseObject implements MouseObject {
         synchronized (robot) {
             int buttonEventCode = MouseCodes.getEventCodeByName(button);
             if (buttonEventCode == -1) {
-                Log.error("Undefined mouse button '%s' in release method\n", button);
+                ClickAutoLog.get().error("Undefined mouse button '%s' in release method\n", button);
                 return;
             }
             robot.mouseRelease(buttonEventCode);
@@ -434,7 +434,7 @@ public class ScriptMouseObject implements MouseObject {
     public void wheel(String direction, int amount) {
         synchronized (robot) {
             if (amount < 0) {
-                Log.error("Wheel amount '%s' can't be less then 0\n", amount);
+                ClickAutoLog.get().error("Wheel amount '%s' can't be less then 0\n", amount);
                 return;
             }
 
@@ -448,7 +448,7 @@ public class ScriptMouseObject implements MouseObject {
                     robot.delay(getMultipliedWheelDelay());
                     break;
                 default:
-                    Log.error("Wrong wheel direction '%s'\n", direction);
+                    ClickAutoLog.get().error("Wrong wheel direction '%s'\n", direction);
                     break;
             }
         }

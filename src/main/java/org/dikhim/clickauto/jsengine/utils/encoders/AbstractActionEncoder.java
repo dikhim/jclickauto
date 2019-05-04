@@ -5,7 +5,7 @@ import org.apache.commons.collections4.bidimap.DualHashBidiMap;
 import org.dikhim.clickauto.jsengine.actions.*;
 import org.dikhim.clickauto.jsengine.events.*;
 import org.dikhim.clickauto.jsengine.utils.KeyCodes;
-import org.dikhim.clickauto.util.logger.Log;
+import org.dikhim.clickauto.util.logger.ClickAutoLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -571,7 +571,7 @@ public abstract class AbstractActionEncoder implements ActionEncoder {
         int delay = (int) (event.getTime() - previousEvent.getTime());
         if (delay < 0) {
             delay = 0;
-            Log.error("delay=%s is less then 0, it has been set to 0\n", delay);
+            ClickAutoLog.get().get().error("delay=%s is less then 0, it has been set to 0\n", delay);
         }
         if (delay <= MAX_DELAY_MILLISECONDS) {
             actions.add(new DelayMillisecondsAction(delay));
@@ -580,7 +580,7 @@ public abstract class AbstractActionEncoder implements ActionEncoder {
             int seconds = delay / 1000;
             if (seconds > MAX_DELAY_SECONDS) {
                 seconds = MAX_DELAY_SECONDS;
-                Log.error("delay=%s is bigger then %s seconds, " +
+                ClickAutoLog.get().get().error("delay=%s is bigger then %s seconds, " +
                         "it has been set to %s seconds\n", delay, MAX_DELAY_SECONDS, MAX_DELAY_SECONDS);
             }
             actions.add(new DelaySecondsAction(seconds));
@@ -642,7 +642,7 @@ public abstract class AbstractActionEncoder implements ActionEncoder {
         int amount = mouseWheelEvent.getAmount();
         if (amount > MAX_WHEEL_AMOUNT) {
             amount = MAX_WHEEL_AMOUNT;
-            Log.error("wheel amount=%s is bigger then %s, it has been set to %s\n", amount, MAX_WHEEL_AMOUNT, MAX_WHEEL_AMOUNT);
+            ClickAutoLog.get().get().error("wheel amount=%s is bigger then %s, it has been set to %s\n", amount, MAX_WHEEL_AMOUNT, MAX_WHEEL_AMOUNT);
         }
         switch (mouseWheelEvent.getDirection()) {
             case "DOWN":
