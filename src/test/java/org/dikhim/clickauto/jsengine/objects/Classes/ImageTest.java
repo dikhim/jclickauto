@@ -1,22 +1,19 @@
 package org.dikhim.clickauto.jsengine.objects.Classes;
 
-import org.dikhim.clickauto.util.ImageUtil;
 import org.junit.BeforeClass;
-import org.junit.runner.RunWith;
 
 import javax.imageio.ImageIO;
-
 import java.awt.*;
 import java.io.File;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class ImageTest {
     private static Image parent;
     private static Image waldo;
     private static Image greenDot;
-
 
     @BeforeClass
     public static void init() throws Exception {

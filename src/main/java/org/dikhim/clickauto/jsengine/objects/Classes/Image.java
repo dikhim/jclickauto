@@ -1,18 +1,13 @@
 package org.dikhim.clickauto.jsengine.objects.Classes;
 
-import org.dikhim.clickauto.jsengine.utils.image.ColorInfo;
 import org.dikhim.clickauto.jsengine.utils.image.ImageFinder;
 import org.dikhim.clickauto.jsengine.utils.image.Pixels;
 import org.dikhim.clickauto.util.ImageUtil;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 
-@SuppressWarnings("unused")
 public class Image extends BufferedImage {
     protected Pixels pixelsHolder = new Pixels();
 
