@@ -53,7 +53,7 @@ public class ImageFinder {
             }
         }
         //
-        LimitedPriorityQueue<FoundArea> queue = new LimitedPriorityQueue<>(limit);
+        LimitedPriorityQueue<FoundArea> queue = new LimitedPriorityQueue<>(limit*10);
 
         // mapFilter
 
@@ -95,7 +95,6 @@ public class ImageFinder {
         }
         java.util.List<FoundArea> list = new ArrayList<>(queue.toList());
         java.util.List<FoundArea> resultList = new ArrayList<>();
-
         while (list.size() > 0) {
             FoundArea area = list.get(0);
             java.util.List<FoundArea> intersectingAreas =
@@ -104,7 +103,7 @@ public class ImageFinder {
             resultList.add(intersectingAreas.stream().max(FoundArea::compareTo).get());
             list.removeAll(intersectingAreas);
         }
-        return resultList.stream().map(Rectangle::getLocation).collect(Collectors.toList());
+        return resultList.stream().map(Rectangle::getLocation).limit(limit).collect(Collectors.toList());
     }
 
     public static List<Point> matchQuickThresholdLimit(BufferedImage parent, BufferedImage template, double threshold, int limit) {
