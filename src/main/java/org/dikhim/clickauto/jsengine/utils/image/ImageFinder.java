@@ -197,7 +197,6 @@ public class ImageFinder {
         validateParentTemplate(parent, image);
         validateLimit(limit);
         List<Point> resultList = new ArrayList<>();
-        Point point = new Point(-1, -1);
         if (parent.isCompiled() && image.isCompiled()) {
             List<Point> possiblePositions = new ArrayList<>();
             List<ColorInfo> childColorInfoList = image.getPixelsHolder().getPixels();
@@ -209,7 +208,6 @@ public class ImageFinder {
                 // points for the color in the parent image
                 List<Point> parentPoints = parent.getPixelsHolder().getForColor(colorInfo.getRgb());
                 if (parentPoints == null) break;
-
                 for (Point p : childPoints) {
                     if (first) {
                         first = false;
