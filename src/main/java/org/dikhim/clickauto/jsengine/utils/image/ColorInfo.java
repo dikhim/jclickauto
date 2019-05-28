@@ -6,7 +6,7 @@ import java.util.List;
 
 public class ColorInfo {
     private int rgb;
-    private java.util.List<Point> colorBlocks;
+    private List<Point> colorBlocks;
 
     public ColorInfo(int rgb, Point point) {
         this.rgb = rgb;

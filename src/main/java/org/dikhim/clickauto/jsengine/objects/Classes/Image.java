@@ -35,7 +35,6 @@ public class Image extends BufferedImage {
                 pixelsHolder.add(getRGB(i, j), new Point(i, j));
             }
         }
-        pixelsHolder.getPixels().sort(Comparator.comparingInt(ColorInfo::size));
     }
 
     public boolean isCompiled() {
