@@ -78,6 +78,10 @@ public class Image extends BufferedImage {
         return ImageFinder.matchThresholdLimit(this, image, threshold, limit);
     }
 
+    public List<Point> matchQuickThresholdLimit(Image image, double threshold, int limit){
+        return ImageFinder.matchQuickThresholdLimit(this, image, threshold, limit);
+    }
+
     public List<Point> matchQuickThresholdLimit(Image image, double threshold, int limit, double factor){
         return ImageFinder.matchQuickThresholdLimit(this, image, threshold, limit, factor);
     }
