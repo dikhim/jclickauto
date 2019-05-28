@@ -53,7 +53,7 @@ public class ImageFinder {
             }
         }
         //
-        LimitedPriorityQueue<FoundArea> queue = new LimitedPriorityQueue<>(limit*10);
+        LimitedPriorityQueue<FoundArea> queue = new LimitedPriorityQueue<>(limit * 10);
 
         // mapFilter
 
@@ -119,7 +119,9 @@ public class ImageFinder {
         validateLimit(limit);
         int dx = parent.getWidth() - template.getWidth();
         int dy = parent.getHeight() - template.getHeight();
-        double factor1 = Math.max(1.0, Math.pow((long) dx * dy * template.getHeight() * template.getWidth(), 0.25) * factor / 40000000.0);
+        double tmpFactor = Math.max(1.0, Math.pow((long) dx * dy * template.getHeight() * template.getWidth() / 40000000.0, 0.25));
+        double factor1 = Math.max(1.0, tmpFactor * factor);
+        System.out.println(factor1);
         BufferedImage parentMini;
         BufferedImage templateMini;
         List<Point> points;
@@ -159,12 +161,12 @@ public class ImageFinder {
 
     //// Image
     public static List<Point> findAll(Image parent, Image image) {
-        validateParentTemplate(parent,image);
+        validateParentTemplate(parent, image);
         return findLimit(parent, image, Integer.MAX_VALUE);
     }
 
     public static List<Point> findAllCenter(Image parent, Image image) {
-        validateParentTemplate(parent,image);
+        validateParentTemplate(parent, image);
         return findAll(parent, image).stream()
                 .peek(point -> {
                     point.x = point.x + image.getWidth() / 2;
@@ -174,7 +176,7 @@ public class ImageFinder {
     }
 
     public static Point findFirst(Image parent, Image image) {
-        validateParentTemplate(parent,image);
+        validateParentTemplate(parent, image);
         List<Point> pointList = findLimit(parent, image, 1);
         if (!pointList.isEmpty()) {
             return pointList.get(0);
@@ -184,7 +186,7 @@ public class ImageFinder {
     }
 
     public static Point findFirstCenter(Image parent, Image image) {
-        validateParentTemplate(parent,image);
+        validateParentTemplate(parent, image);
         Point point = findFirst(parent, image);
         point.x = point.x + image.getWidth() / 2;
         point.y = point.y + image.getHeight() / 2;
@@ -192,7 +194,7 @@ public class ImageFinder {
     }
 
     public static List<Point> findLimit(Image parent, Image image, int limit) {
-        validateParentTemplate(parent,image);
+        validateParentTemplate(parent, image);
         validateLimit(limit);
         List<Point> resultList = new ArrayList<>();
         Point point = new Point(-1, -1);
@@ -267,9 +269,9 @@ public class ImageFinder {
     }
 
     public static List<Point> findLimitCenter(Image parent, Image image, int limit) {
-        validateParentTemplate(parent,image);
+        validateParentTemplate(parent, image);
         validateLimit(limit);
-        return findLimit(parent,image, limit).stream()
+        return findLimit(parent, image, limit).stream()
                 .peek(point -> {
                     point.x = point.x + image.getWidth() / 2;
                     point.y = point.y + image.getHeight() / 2;
@@ -353,9 +355,9 @@ public class ImageFinder {
     }
 
     private static void validateFactor(double factor) {
-        if(factor < 1)new IllegalArgumentException("The factor should not be less than 0");
+        if (factor < 1) new IllegalArgumentException("The factor should not be less than 0");
     }
-    
+
     private static void validateThreshold(double theshold) {
         if (theshold < 0 || theshold > 1) new IllegalArgumentException("The threshold should be between 0 and 1");
     }
