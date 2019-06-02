@@ -16,10 +16,16 @@ public class ScriptScreenObject implements ScreenObject {
     }
 
     @Override
+    public Image getImage(Rectangle rectangle) {
+        synchronized (robot) {
+            return new Image(robot.createScreenCapture(rectangle));
+        }
+    }
+
+    @Override
     public Image getImage(int x0, int y0, int x1, int y1) {
         synchronized (robot) {
-            Rectangle rectangle = createFitsRectangle(x0, y0, x1, y1);
-            return getImage(rectangle);
+            return getImage(createFitsRectangle(x0, y0, x1, y1));
         }
     }
 
@@ -31,16 +37,9 @@ public class ScriptScreenObject implements ScreenObject {
     }
 
     @Override
-    public Image getImage(Rectangle rectangle) {
-        synchronized (robot) {
-            return new Image(robot.createScreenCapture(rectangle));
-        }
-    }
-
-    @Override
     public Image getFilledImage(int x0, int y0, int x1, int y1) {
         synchronized (robot) {
-            Rectangle rectangle = createRectangle(x0, y0, x1, y1);
+            Rectangle rectangle = ShapeUtil.createRectangle(x0, y0, x1, y1);
             Rectangle fitsRectangle = createFitsRectangle(x0, y0, x1, y1);
 
             BufferedImage capturedImage = robot.createScreenCapture(fitsRectangle);
@@ -79,27 +78,10 @@ public class ScriptScreenObject implements ScreenObject {
         return Toolkit.getDefaultToolkit().getScreenSize().width;
     }
 
-    protected Rectangle createRectangle(int x0, int y0, int x1, int y1) {
-        return ShapeUtil.createRectangle(x0, y0, x1, y1);
-    }
-
     protected Rectangle createFitsRectangle(int x0, int y0, int x1, int y1) {
-        if (x0 < x1 && y0 < y1 && x0 >= 0 && y0 >= 0 && x1 <= getWidth() && y1 <= getHeight())
-            return ShapeUtil.createRectangle(x0, y0, x1, y1);
-
-
-        int min = Math.min(x0, x1);
-        int max = Math.max(x0, x1);
-        x0 = Math.max(min, 0);
-        x1 = Math.min(max, getWidth());
-
-        min = Math.min(y0, y1);
-        max = Math.max(y0, y1);
-        y0 = Math.max(min, 0);
-        y1 = Math.min(max, getHeight());
-        
-
-        return ShapeUtil.createRectangle(x0, y0, x1, y1);
+        Rectangle parent = new Rectangle(0, 0, getWidth(), getHeight());
+        Rectangle child = ShapeUtil.createRectangle(x0, y0, x1, y1);
+        return ShapeUtil.createMinimalRectangleFitIntoParent(parent, child);
     }
 
     

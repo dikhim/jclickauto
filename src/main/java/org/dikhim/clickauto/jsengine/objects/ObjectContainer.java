@@ -25,6 +25,7 @@ public class ObjectContainer {
         SystemObject systemObject = new ScriptSystemObject(engine);
         CombinedObject combinedObject = new ScriptCombinedObject(mouseObject, keyboardObject, systemObject);
         ClipboardObject clipboardObject = new ScriptClipboardObject(robot);
+        ScreenObject screenObject = new ScriptScreenObject(robot);
         CreateObject createObject = new ScriptCreateObject();
         ThreadObject threadObject = new ScriptThreadObject();
         defaultObjects.put("key", keyboardObject);
@@ -32,6 +33,7 @@ public class ObjectContainer {
         defaultObjects.put("system", systemObject);
         defaultObjects.put("combined", combinedObject);
         defaultObjects.put("clipboard", clipboardObject);
+        defaultObjects.put("screen", screenObject);
         defaultObjects.put("create", createObject);
         defaultObjects.put("thread", threadObject);
         objects.putAll(defaultObjects);
