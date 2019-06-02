@@ -121,7 +121,6 @@ public class ImageFinder {
         int dy = parent.getHeight() - template.getHeight();
         double tmpFactor = Math.max(1.0, Math.pow((long) dx * dy * template.getHeight() * template.getWidth() / 40000000.0, 0.25));
         double factor1 = Math.max(1.0, tmpFactor * factor);
-        System.out.println(factor1);
         BufferedImage parentMini;
         BufferedImage templateMini;
         List<Point> points;

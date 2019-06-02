@@ -4,11 +4,6 @@ import java.awt.*;
 
 public class ShapeUtil {
     public static Rectangle createRectangle(int x0, int y0, int x1, int y1) {
-        
-        if (x0 < x1 && y0 < y1 && x0 >= 0 && y0 >= 0)
-            return new Rectangle(x0, y0, x1 - x0, y1 - y0);
-
-        
         int min = Math.min(x0, x1);
         int max = Math.max(x0, x1);
         x0 = min;
@@ -25,4 +20,21 @@ public class ShapeUtil {
     public static Rectangle createRectangle(Point p1, Point p2) {
         return createRectangle(p1.x, p1.y, p2.x, p2.y);
     }
+
+    public static Rectangle createRectangleIncludesBorder(int x0, int y0, int x1, int y1) {
+        Rectangle tempRect = createRectangle(x0, y0, x1, y1);
+
+        int x = tempRect.x;
+        int y = tempRect.y;
+        int w = tempRect.width + 1;
+        int h = tempRect.height + 1;
+
+        return new Rectangle(x, y, w, h);
+    }
+
+    public static Rectangle createRectangleIncludesBorder(Point p1, Point p2) {
+        return createRectangleIncludesBorder(p1.x, p1.y, p2.x, p2.y);
+    }
+    
+    
 }

@@ -137,15 +137,25 @@ public class ClickAuto {
     public ClickAutoScriptEngine getEngine() {
         return engine;
     }
-    
+
+    /**
+     * Wait until evaluation is complete.
+     */
     public void waitEvaluationComplete() {
         engine.waitMainThreadEnd();
     }
 
+    /**
+     * Wait until at least one thread is alive
+     */
     public void waitAllThreadsEnd() {
         engine.waitAllThreadsEnd();
     }
 
+    /**
+     * Get the logger
+     * @return logger
+     */
     public static ClickAutoLog getLogger() {
         return ClickAutoLog.get();
     }

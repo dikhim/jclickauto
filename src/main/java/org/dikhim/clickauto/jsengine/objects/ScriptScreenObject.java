@@ -29,7 +29,7 @@ public class ScriptScreenObject implements ScreenObject {
             return getImage(p1.x, p1.y, p2.x, p2.y);
         }
     }
-    
+
     @Override
     public Image getImage(Rectangle rectangle) {
         synchronized (robot) {
@@ -87,8 +87,7 @@ public class ScriptScreenObject implements ScreenObject {
         if (x0 < x1 && y0 < y1 && x0 >= 0 && y0 >= 0 && x1 <= getWidth() && y1 <= getHeight())
             return ShapeUtil.createRectangle(x0, y0, x1, y1);
 
-        
-        
+
         int min = Math.min(x0, x1);
         int max = Math.max(x0, x1);
         x0 = Math.max(min, 0);
@@ -98,7 +97,10 @@ public class ScriptScreenObject implements ScreenObject {
         max = Math.max(y0, y1);
         y0 = Math.max(min, 0);
         y1 = Math.min(max, getHeight());
+        
 
         return ShapeUtil.createRectangle(x0, y0, x1, y1);
     }
+
+    
 }
