@@ -2,11 +2,9 @@ package org.dikhim.clickauto.jsengine;
 
 import org.dikhim.clickauto.jsengine.objects.ObjectContainer;
 import org.dikhim.clickauto.jsengine.robot.Robot;
+import org.dikhim.clickauto.util.logger.ClickAutoLog;
 
-import javax.script.ScriptContext;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.SimpleScriptContext;
+import javax.script.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +40,7 @@ public class ClickAutoScriptEngine {
                     engine.eval(s, context);
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                ClickAutoLog.get().error(e.getMessage());
             }
         });
     }

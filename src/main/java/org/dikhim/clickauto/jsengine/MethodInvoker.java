@@ -45,7 +45,7 @@ class MethodInvoker {
                 try {
                     invocable.invokeFunction(name, args);
                 } catch (ScriptException | NoSuchMethodException e) {
-                    ClickAutoLog.get().error(e.getMessage() + "\n");
+                    ClickAutoLog.get().error(e.getMessage());
                 } finally {
                     threads.remove(Thread.currentThread());
                     lock.unlock();
