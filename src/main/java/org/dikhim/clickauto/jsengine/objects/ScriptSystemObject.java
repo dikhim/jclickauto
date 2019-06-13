@@ -121,4 +121,14 @@ public class ScriptSystemObject implements SystemObject {
             setMultiplier(1f / speed);
         }
     }
+
+    @Override
+    public long time() {
+        return System.currentTimeMillis();
+    }
+
+    @Override
+    public long nanoTime() {
+        return System.nanoTime();
+    }
 }

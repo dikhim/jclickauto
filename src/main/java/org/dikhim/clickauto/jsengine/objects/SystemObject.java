@@ -1,8 +1,6 @@
 package org.dikhim.clickauto.jsengine.objects;
 
 
-import org.dikhim.clickauto.jsengine.objects.Classes.Image;
-
 public interface SystemObject {
     int getMultipliedDelay(int delay);
 
@@ -27,4 +25,8 @@ public interface SystemObject {
     void sleep(int ms);
 
     void sleepNonMultiplied(int ms);
+
+    long time();
+
+    long nanoTime();
 }

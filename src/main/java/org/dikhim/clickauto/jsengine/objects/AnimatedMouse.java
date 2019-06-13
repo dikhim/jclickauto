@@ -6,7 +6,6 @@ public class AnimatedMouse {
     private final ScriptMouseObject mouse;
     private final Robot robot;
     private AnimationMethod method = new LinearMethod();
-    ;
 
 
     public AnimatedMouse(ScriptMouseObject mouseObject, Robot robot) {
