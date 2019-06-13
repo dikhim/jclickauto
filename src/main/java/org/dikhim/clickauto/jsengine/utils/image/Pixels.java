@@ -8,16 +8,26 @@ import java.util.stream.Collectors;
 public class Pixels {
     private Map<Integer, ColorInfo> pixelMap = new HashMap<>();
 
-    private List<ColorInfo> sortedList = new ArrayList<>();
-    
+    private List<ColorInfo> sortedList;
+
 
     public void add(int rgb, Point point) {
         ColorInfo colorInfoOpt1 = pixelMap.get(rgb);
         if (colorInfoOpt1 == null) {
-            pixelMap.put(rgb,new ColorInfo(rgb, point));
-        }else {
+            pixelMap.put(rgb, new ColorInfo(rgb, point));
+        } else {
             colorInfoOpt1.addPoint(point);
         }
+    }
+
+    public void complete() {
+        sortedList = new ArrayList<>();
+
+        sortedList = pixelMap
+                .values()
+                .stream()
+                .sorted(Comparator.comparingInt(ColorInfo::size))
+                .collect(Collectors.toList());
     }
 
     public List<Point> getForColor(int rgb) {
@@ -25,6 +35,8 @@ public class Pixels {
     }
 
     public List<ColorInfo> getPixels() {
-        return pixelMap.values().stream().collect(Collectors.toList());
+        if (sortedList == null) complete();
+
+        return sortedList;
     }
 }

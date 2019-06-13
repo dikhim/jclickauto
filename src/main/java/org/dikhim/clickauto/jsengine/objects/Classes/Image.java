@@ -30,6 +30,7 @@ public class Image extends BufferedImage {
                 pixelsHolder.add(getRGB(i, j), new Point(i, j));
             }
         }
+        pixelsHolder.complete();
     }
 
     public boolean isCompiled() {
