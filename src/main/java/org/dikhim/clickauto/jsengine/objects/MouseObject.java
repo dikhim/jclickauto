@@ -12,6 +12,8 @@ public interface MouseObject {
     void clickAt(String button, int x, int y);
 
     // G
+    AnimatedMouse animated();
+    
     int getMinDelay();
 
     int getMoveDelay();

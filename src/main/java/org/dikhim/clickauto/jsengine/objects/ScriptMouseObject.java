@@ -17,7 +17,8 @@ public class ScriptMouseObject implements MouseObject {
     protected final int MIN_DELAY = 5;
 
     protected final Robot robot;
-    
+    public final AnimatedMouse animated;
+
     protected volatile int pressDelay = PRESS_DELAY;
     protected volatile int releaseDelay = RELEASE_DELAY;
     protected volatile int moveDelay = MOVE_DELAY;
@@ -27,6 +28,12 @@ public class ScriptMouseObject implements MouseObject {
 
     public ScriptMouseObject(Robot robot) {
         this.robot = robot;
+        this.animated = new AnimatedMouse(this, robot);
+    }
+
+    @Override
+    public AnimatedMouse animated() {
+        return animated;
     }
 
     @Override
@@ -42,7 +49,7 @@ public class ScriptMouseObject implements MouseObject {
             return MouseInfo.getPointerInfo().getLocation().y;
         }
     }
-    
+
     // basics
     @Override
     public void button(String button, String action) {
@@ -423,7 +430,7 @@ public class ScriptMouseObject implements MouseObject {
             this.minDelay = minDelay;
         }
     }
-    
+
     /**
      * Rotates mouse wheel
      *
@@ -453,7 +460,7 @@ public class ScriptMouseObject implements MouseObject {
             }
         }
     }
-    
+
     @Override
     public void wheelAt(String direction, int amount, int x, int y) {
         synchronized (robot) {
@@ -489,7 +496,7 @@ public class ScriptMouseObject implements MouseObject {
             return checkDelay((int) (wheelDelay * multiplier));
         }
     }
-    
+
     // private
     protected int checkDelay(int delay) {
         synchronized (robot) {
@@ -499,6 +506,7 @@ public class ScriptMouseObject implements MouseObject {
     }
 
     protected void delay(int delay) {
+        if (delay < 0) delay = 0;
         try {
             Thread.sleep(delay);
         } catch (InterruptedException e) {
