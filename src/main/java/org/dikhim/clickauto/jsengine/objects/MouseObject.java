@@ -1,19 +1,9 @@
 package org.dikhim.clickauto.jsengine.objects;
 
 public interface MouseObject {
-    // B
-    void button(String button, String action);
-
-    void buttonAt(String button, String action, int x, int y);
-
-    // C
-    void click(String button);
-
-    void clickAt(String button, int x, int y);
-
     // G
     AnimatedMouse animated();
-    
+
     int getMinDelay();
 
     int getMoveDelay();
@@ -40,31 +30,11 @@ public interface MouseObject {
 
     int getY();
 
-
     // M
     void move(int dx, int dy);
 
-    void moveAndButton(String button, String action, int dx, int dy);
-
-    void moveAndClick(String button, int dx, int dy);
-
-    void moveAndPress(String button, int dx, int dy);
-
-    void moveAndRelease(String button, int dx, int dy);
-
-    void moveAndWheel(String direction, int amount, int dx, int dy);
-
     void moveTo(int x, int y);
 
-    // P
-    void press(String button);
-
-    void pressAt(String button, int x, int y);
-
-    // R
-    void release(String button);
-
-    void releaseAt(String button, int x, int y);
 
     void resetDelays();
 
@@ -93,8 +63,70 @@ public interface MouseObject {
 
     void setY(int y);
 
-    // W
-    void wheel(String direction, int amount);
 
-    void wheelAt(String direction, int amount, int x, int y);
+    void pressLeft();
+
+    void pressRight();
+
+    void pressMiddle();
+
+    void releaseLeft();
+
+    void releaseRight();
+
+    void releaseMiddle();
+
+    void clickLeft();
+
+    void clickRight();
+
+    void clickMiddle();
+
+    void wheelUp(int amount);
+
+    void wheelDown(int amount);
+
+    void pressLeftAt(int x, int y);
+
+    void pressRightAt(int x, int y);
+
+    void pressMiddleAt(int x, int y);
+
+    void releaseLeftAt(int x, int y);
+
+    void releaseRightAt(int x, int y);
+
+    void releaseMiddleAt(int x, int y);
+
+    void clickLeftAt(int x, int y);
+
+    void clickRightAt(int x, int y);
+
+    void clickMiddleAt(int x, int y);
+
+    void wheelUpAt(int x, int y, int amount);
+
+    void wheelDownAt(int x, int y, int amount);
+
+    void moveAndPressLeft(int dx, int dy);
+
+    void moveAndPressRight(int dx, int dy);
+
+    void moveAndPressMiddle(int dx, int dy);
+
+    void moveAndReleaseLeft(int dx, int dy);
+
+    void moveAndReleaseRight(int dx, int dy);
+
+    void moveAndReleaseMiddle(int dx, int dy);
+
+    void moveAndClickLeft(int dx, int dy);
+
+    void moveAndClickRight(int dx, int dy);
+
+    void moveAndClickMiddle(int dx, int dy);
+
+    void moveAndWheelUp(int dx, int dy, int amount);
+
+    void moveAndWheelDown(int dx, int dy, int amount);
 }

@@ -31,6 +31,81 @@ public class ScriptMouseObject implements MouseObject {
         this.animated = new AnimatedMouse(this, robot);
     }
 
+
+    // basic
+
+    protected void press(String button) {
+        int buttonEventCode = MouseCodes.getEventCodeByName(button);
+        if (buttonEventCode == -1) {
+            ClickAutoLog.get().error("Undefined mouse button '%s' in press method\n", button);
+            return;
+        }
+        robot.mousePress(buttonEventCode);
+        delay(getMultipliedPressDelay());
+    }
+
+    protected void release(String button) {
+        int buttonEventCode = MouseCodes.getEventCodeByName(button);
+        if (buttonEventCode == -1) {
+            ClickAutoLog.get().error("Undefined mouse button '%s' in release method\n", button);
+            return;
+        }
+        robot.mouseRelease(buttonEventCode);
+        delay(getMultipliedReleaseDelay());
+    }
+
+    protected void click(String buttons) {
+        String[] buttonList = buttons.split(" ");
+        for (String btn : buttonList) {
+            int buttonEventCode = MouseCodes.getEventCodeByName(btn);
+            if (buttonEventCode == -1) {
+                ClickAutoLog.get().error("Undefined mouse button '%s' in click method\n", btn);
+                return;
+            }
+            robot.mousePress(buttonEventCode);
+            delay(getMultipliedPressDelay());
+            robot.mouseRelease(buttonEventCode);
+            delay(getMultipliedReleaseDelay());
+        }
+    }
+
+    protected void wheel(String direction, int amount) {
+
+        if (amount < 0) {
+            ClickAutoLog.get().error("Wheel amount '%s' can't be less then 0\n", amount);
+            return;
+        }
+
+        switch (direction) {
+            case "DOWN":
+                robot.mouseWheel(amount);
+                robot.delay(getMultipliedWheelDelay());
+                break;
+            case "UP":
+                robot.mouseWheel(amount * -1);
+                robot.delay(getMultipliedWheelDelay());
+                break;
+            default:
+                ClickAutoLog.get().error("Wrong wheel direction '%s'\n", direction);
+                break;
+        }
+
+    }
+
+    protected int checkDelay(int delay) {
+        if (delay < minDelay) return minDelay;
+        return delay;
+    }
+
+    protected void delay(int delay) {
+        if (delay < 0) delay = 0;
+        try {
+            Thread.sleep(delay);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
+
     @Override
     public AnimatedMouse animated() {
         return animated;
@@ -50,48 +125,11 @@ public class ScriptMouseObject implements MouseObject {
         }
     }
 
-    // basics
-    @Override
-    public void button(String button, String action) {
-        synchronized (robot) {
-            switch (action) {
-                case "PRESS":
-                    press(button);
-                    break;
-                case "RELEASE":
-                    release(button);
-                    break;
-                case "CLICK":
-                    click(button);
-                    break;
-                default:
-                    ClickAutoLog.get().error("Undefined mouse actions '%s' in button method", action);
-            }
-        }
-    }
-
-    @Override
-    public void buttonAt(String button, String action, int x, int y) {
-        synchronized (robot) {
-            moveTo(x, y);
-            button(button, action);
-        }
-    }
-
-    // movement
     @Override
     public void move(int dx, int dy) {
         synchronized (robot) {
             robot.mouseMove(getX() + dx, getY() + dy);
             delay(getMultipliedMoveDelay());
-        }
-    }
-
-    @Override
-    public void moveAndButton(String button, String action, int dx, int dy) {
-        synchronized (robot) {
-            move(dx, dy);
-            button(button, action);
         }
     }
 
@@ -131,128 +169,7 @@ public class ScriptMouseObject implements MouseObject {
         }
     }
 
-    // click
-
-    /**
-     * Clicks mouse button
-     *
-     * @param buttons - name of the mouse button that should be clicked
-     */
-    @Override
-    public void click(String buttons) {
-        synchronized (robot) {
-            String[] buttonList = buttons.split(" ");
-            for (String btn : buttonList) {
-                int buttonEventCode = MouseCodes.getEventCodeByName(btn);
-                if (buttonEventCode == -1) {
-                    ClickAutoLog.get().error("Undefined mouse button '%s' in click method\n", btn);
-                    return;
-                }
-                robot.mousePress(buttonEventCode);
-                delay(getMultipliedPressDelay());
-                robot.mouseRelease(buttonEventCode);
-                delay(getMultipliedReleaseDelay());
-            }
-        }
-    }
-
-    @Override
-    public void clickAt(String button, int x, int y) {
-        synchronized (robot) {
-            moveTo(x, y);
-            click(button);
-        }
-    }
-
-    @Override
-    public void moveAndClick(String button, int dx, int dy) {
-        synchronized (robot) {
-            move(dx, dy);
-            click(button);
-        }
-    }
-
-    // press
-
-    /**
-     * Presses mouse button
-     *
-     * @param button - name of the mouse button that should be pressed
-     */
-    @Override
-    public void press(String button) {
-        synchronized (robot) {
-            int buttonEventCode = MouseCodes.getEventCodeByName(button);
-            if (buttonEventCode == -1) {
-                ClickAutoLog.get().error("Undefined mouse button '%s' in press method\n", button);
-                return;
-            }
-            robot.mousePress(buttonEventCode);
-            delay(getMultipliedPressDelay());
-        }
-    }
-
-    @Override
-    public void pressAt(String button, int x, int y) {
-        synchronized (robot) {
-            moveTo(x, y);
-            press(button);
-        }
-    }
-
-    @Override
-    public void moveAndPress(String button, int dx, int dy) {
-        synchronized (robot) {
-            move(dx, dy);
-            press(button);
-        }
-    }
-
-    // release
-
-    /**
-     * Releases mouse button
-     *
-     * @param button - name of the button that should be released
-     */
-    @Override
-    public void release(String button) {
-        synchronized (robot) {
-            int buttonEventCode = MouseCodes.getEventCodeByName(button);
-            if (buttonEventCode == -1) {
-                ClickAutoLog.get().error("Undefined mouse button '%s' in release method\n", button);
-                return;
-            }
-            robot.mouseRelease(buttonEventCode);
-            delay(getMultipliedReleaseDelay());
-        }
-    }
-
-    @Override
-    public void releaseAt(String button, int x, int y) {
-        synchronized (robot) {
-            moveTo(x, y);
-            release(button);
-        }
-    }
-
-    @Override
-    public void moveAndRelease(String button, int dx, int dy) {
-        synchronized (robot) {
-            move(dx, dy);
-            release(button);
-        }
-    }
-
-    @Override
-    public void moveAndWheel(String direction, int amount, int dx, int dy) {
-        synchronized (robot) {
-            move(dx, dy);
-            wheel(direction, amount);
-        }
-    }
-
-    // Getters\setters
+    // delays
 
     /**
      * @return the pressDelay
@@ -431,44 +348,6 @@ public class ScriptMouseObject implements MouseObject {
         }
     }
 
-    /**
-     * Rotates mouse wheel
-     *
-     * @param direction - 'UP' or 'DOWN'
-     * @param amount    - any non negative number
-     */
-    @Override
-    public void wheel(String direction, int amount) {
-        synchronized (robot) {
-            if (amount < 0) {
-                ClickAutoLog.get().error("Wheel amount '%s' can't be less then 0\n", amount);
-                return;
-            }
-
-            switch (direction) {
-                case "DOWN":
-                    robot.mouseWheel(amount);
-                    robot.delay(getMultipliedWheelDelay());
-                    break;
-                case "UP":
-                    robot.mouseWheel(amount * -1);
-                    robot.delay(getMultipliedWheelDelay());
-                    break;
-                default:
-                    ClickAutoLog.get().error("Wrong wheel direction '%s'\n", direction);
-                    break;
-            }
-        }
-    }
-
-    @Override
-    public void wheelAt(String direction, int amount, int x, int y) {
-        synchronized (robot) {
-            moveTo(x, y);
-            wheel(direction, amount);
-        }
-    }
-
     @Override
     public int getMultipliedPressDelay() {
         synchronized (robot) {
@@ -497,20 +376,258 @@ public class ScriptMouseObject implements MouseObject {
         }
     }
 
-    // private
-    protected int checkDelay(int delay) {
+    // basic
+
+    @Override
+    public void pressLeft() {
         synchronized (robot) {
-            if (delay < minDelay) return minDelay;
-            return delay;
+            press("LEFT");
         }
     }
 
-    protected void delay(int delay) {
-        if (delay < 0) delay = 0;
-        try {
-            Thread.sleep(delay);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
+    @Override
+    public void pressRight() {
+        synchronized (robot) {
+            press("RIGHT");
+        }
+    }
+
+    @Override
+    public void pressMiddle() {
+        synchronized (robot) {
+            press("MIDDLE");
+        }
+    }
+
+    @Override
+    public void releaseLeft() {
+        synchronized (robot) {
+            release("LEFT");
+        }
+    }
+
+    @Override
+    public void releaseRight() {
+        synchronized (robot) {
+            release("RIGHT");
+        }
+    }
+
+    @Override
+    public void releaseMiddle() {
+        synchronized (robot) {
+            release("MIDDLE");
+        }
+    }
+
+    @Override
+    public void clickLeft() {
+        synchronized (robot) {
+            click("LEFT");
+        }
+    }
+
+    @Override
+    public void clickRight() {
+        synchronized (robot) {
+            click("RIGHT");
+        }
+    }
+
+    @Override
+    public void clickMiddle() {
+        synchronized (robot) {
+            click("MIDDLE");
+        }
+    }
+
+    @Override
+    public void wheelUp(int amount) {
+        synchronized (robot) {
+            wheel("UP", amount);
+        }
+    }
+
+    @Override
+    public void wheelDown(int amount) {
+        synchronized (robot) {
+            wheel("DOWN", amount);
+        }
+    }
+
+    @Override
+    public void pressLeftAt(int x, int y) {
+        synchronized (robot) {
+            moveTo(x, y);
+            press("LEFT");
+        }
+    }
+
+    @Override
+    public void pressRightAt(int x, int y) {
+        synchronized (robot) {
+            moveTo(x, y);
+            press("RIGHT");
+        }
+    }
+
+    @Override
+    public void pressMiddleAt(int x, int y) {
+        synchronized (robot) {
+            moveTo(x, y);
+            press("MIDDLE");
+        }
+    }
+
+    @Override
+    public void releaseLeftAt(int x, int y) {
+        synchronized (robot) {
+            moveTo(x, y);
+            release("LEFT");
+        }
+    }
+
+    @Override
+    public void releaseRightAt(int x, int y) {
+        synchronized (robot) {
+            moveTo(x, y);
+            release("RIGHT");
+        }
+    }
+
+    @Override
+    public void releaseMiddleAt(int x, int y) {
+        synchronized (robot) {
+            moveTo(x, y);
+            release("MIDDLE");
+        }
+    }
+
+    @Override
+    public void clickLeftAt(int x, int y) {
+        synchronized (robot) {
+            moveTo(x, y);
+            click("LEFT");
+        }
+    }
+
+    @Override
+    public void clickRightAt(int x, int y) {
+        synchronized (robot) {
+            moveTo(x, y);
+            click("RIGHT");
+        }
+    }
+
+    @Override
+    public void clickMiddleAt(int x, int y) {
+        synchronized (robot) {
+            moveTo(x, y);
+            click("MIDDLE");
+        }
+    }
+
+    @Override
+    public void wheelUpAt(int x, int y, int amount) {
+        synchronized (robot) {
+            moveTo(x, y);
+            wheel("UP", amount);
+        }
+    }
+
+    @Override
+    public void wheelDownAt(int x, int y, int amount) {
+        synchronized (robot) {
+            moveTo(x, y);
+            wheel("DOWN", amount);
+        }
+    }
+
+    @Override
+    public void moveAndPressLeft(int dx, int dy) {
+        synchronized (robot) {
+            move(dx, dy);
+            press("LEFT");
+        }
+    }
+
+    @Override
+    public void moveAndPressRight(int dx, int dy) {
+        synchronized (robot) {
+            move(dx, dy);
+            press("RIGHT");
+        }
+    }
+
+    @Override
+    public void moveAndPressMiddle(int dx, int dy) {
+        synchronized (robot) {
+            move(dx, dy);
+            press("MIDDLE");
+        }
+    }
+
+    @Override
+    public void moveAndReleaseLeft(int dx, int dy) {
+        synchronized (robot) {
+            move(dx, dy);
+            release("LEFT");
+        }
+    }
+
+    @Override
+    public void moveAndReleaseRight(int dx, int dy) {
+        synchronized (robot) {
+            move(dx, dy);
+            release("RIGHT");
+        }
+    }
+
+    @Override
+    public void moveAndReleaseMiddle(int dx, int dy) {
+        synchronized (robot) {
+            move(dx, dy);
+            release("MIDDLE");
+        }
+    }
+
+    @Override
+    public void moveAndClickLeft(int dx, int dy) {
+        synchronized (robot) {
+            move(dx, dy);
+            click("LEFT");
+        }
+    }
+
+    @Override
+    public void moveAndClickRight(int dx, int dy) {
+        synchronized (robot) {
+            move(dx, dy);
+            click("RIGHT");
+        }
+    }
+
+    @Override
+    public void moveAndClickMiddle(int dx, int dy) {
+        synchronized (robot) {
+            move(dx, dy);
+            click("MIDDLE");
+        }
+    }
+
+    @Override
+    public void moveAndWheelUp(int dx, int dy, int amount) {
+        synchronized (robot) {
+            move(dx, dy);
+            wheel("UP", amount);
+        }
+    }
+
+    @Override
+    public void moveAndWheelDown(int dx, int dy, int amount) {
+        synchronized (robot) {
+            move(dx, dy);
+            wheel("DOWN", amount);
         }
     }
 }

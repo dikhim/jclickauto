@@ -7,13 +7,12 @@ public class AnimatedMouse {
     private final Robot robot;
     private AnimationMethod method = new LinearMethod();
 
-
     public AnimatedMouse(ScriptMouseObject mouseObject, Robot robot) {
         this.mouse = mouseObject;
         this.robot = robot;
     }
 
-    public void moveAnimated(int dx, int dy, int delay) {
+    public void move(int dx, int dy, int delay) {
         synchronized (robot) {
             long startTime = System.currentTimeMillis();
             double animationTime = mouse.getMultiplier() * delay;
@@ -39,7 +38,7 @@ public class AnimatedMouse {
     }
 
 
-    public void moveToAnimated(int x, int y, int delay) {
+    public void moveTo(int x, int y, int delay) {
         synchronized (robot) {
             long startTime = System.currentTimeMillis();
             double animationTime = mouse.getMultiplier() * delay;
@@ -60,19 +59,182 @@ public class AnimatedMouse {
         }
     }
 
+    public void pressLeftAt(int x, int y, int delay) {
+        synchronized (robot) {
+            moveTo(x, y, delay);
+            mouse.pressLeft();
+        }
+    }
+
+    public void pressRightAt(int x, int y, int delay) {
+        synchronized (robot) {
+            moveTo(x, y, delay);
+            mouse.pressRight();
+        }
+    }
+
+    public void pressMiddleAt(int x, int y, int delay) {
+        synchronized (robot) {
+            moveTo(x, y, delay);
+            mouse.pressMiddle();
+        }
+    }
+
+    public void releaseLeftAt(int x, int y, int delay) {
+        synchronized (robot) {
+            moveTo(x, y, delay);
+            mouse.releaseLeft();
+        }
+    }
+
+    public void releseRightAt(int x, int y, int delay) {
+        synchronized (robot) {
+            moveTo(x, y, delay);
+            mouse.releaseRight();
+        }
+    }
+
+    public void releaseMiddleAt(int x, int y, int delay) {
+        synchronized (robot) {
+            moveTo(x, y, delay);
+            mouse.releaseMiddle();
+        }
+    }
+
+    public void clickLeftAt(int x, int y, int delay) {
+        synchronized (robot) {
+            moveTo(x, y, delay);
+            mouse.clickLeft();
+        }
+    }
+
+    public void clickRightAt(int x, int y, int delay) {
+        synchronized (robot) {
+            moveTo(x, y, delay);
+            mouse.clickRight();
+        }
+    }
+
+    public void clickMiddleAt(int x, int y, int delay) {
+        synchronized (robot) {
+            moveTo(x, y, delay);
+            mouse.clickMiddle();
+        }
+    }
+
+    public void wheelUpAt(int x, int y, int amount, int delay) {
+        synchronized (robot) {
+            moveTo(x, y, delay);
+            mouse.wheelUp(amount);
+        }
+    }
+
+    public void wheelDownAt(int x, int y, int amount, int delay) {
+        synchronized (robot) {
+            moveTo(x, y, delay);
+            mouse.wheelDown(amount);
+        }
+    }
+
+
+    public void moveAndPressLeft(int dx, int dy, int delay) {
+        synchronized (robot) {
+            move(dx, dy, delay);
+            mouse.pressLeft();
+        }
+    }
+
+    public void moveAndPressRight(int dx, int dy, int delay) {
+        synchronized (robot) {
+            move(dx, dy, delay);
+            mouse.pressRight();
+        }
+    }
+
+    public void moveAndPressMiddle(int dx, int dy, int delay) {
+        synchronized (robot) {
+            move(dx, dy, delay);
+            mouse.pressMiddle();
+        }
+    }
+
+    public void moveAndReleaseLeft(int dx, int dy, int delay) {
+        synchronized (robot) {
+            move(dx, dy, delay);
+            mouse.releaseLeft();
+        }
+    }
+
+    public void moveAndReleaseRight(int dx, int dy, int delay) {
+        synchronized (robot) {
+            move(dx, dy, delay);
+            mouse.releaseRight();
+        }
+    }
+
+    public void moveAndReleaseMiddle(int dx, int dy, int delay) {
+        synchronized (robot) {
+            move(dx, dy, delay);
+            mouse.releaseMiddle();
+        }
+    }
+
+    public void moveAndClickLeft(int dx, int dy, int delay) {
+        synchronized (robot) {
+            move(dx, dy, delay);
+            mouse.clickLeft();
+        }
+    }
+
+    public void moveAndClickRight(int dx, int dy, int delay) {
+        synchronized (robot) {
+            move(dx, dy, delay);
+            mouse.clickRight();
+        }
+    }
+
+    public void moveAndClickMiddle(int dx, int dy, int delay) {
+        synchronized (robot) {
+            move(dx, dy, delay);
+            mouse.clickMiddle();
+        }
+    }
+
+    public void moveAndWheelUp(int dx, int dy, int amount, int delay) {
+        synchronized (robot) {
+            move(dx, dy, delay);
+            mouse.wheelUp(amount);
+        }
+    }
+
+    public void moveAndWheelDown(int dx, int dy, int amount, int delay) {
+        synchronized (robot) {
+            move(dx, dy, delay);
+            mouse.wheelDown(amount);
+        }
+    }
+
     public void setLinearMethod() {
-        method = new LinearMethod();
+        synchronized (robot) {
+            method = new LinearMethod();
+        }
     }
 
     public void setExponentialMethod() {
-        method = new ExponentialMethod();
+        synchronized (robot) {
+            method = new ExponentialMethod();
+        }
     }
 
     public void setAcceleratingMethod() {
-        method = new AcceleratingMethod();
+        synchronized (robot) {
+            method = new AcceleratingMethod();
+        }
     }
-    
+
     public void setDeceleratingMethod() {
-        method = new DeceleratingMethod();
+        synchronized (robot) {
+            method = new DeceleratingMethod();
+        }
     }
 }
