@@ -87,7 +87,7 @@ public class AnimatedMouse {
         }
     }
 
-    public void releseRightAt(int x, int y, int delay) {
+    public void releaseRightAt(int x, int y, int delay) {
         synchronized (robot) {
             moveTo(x, y, delay);
             mouse.releaseRight();

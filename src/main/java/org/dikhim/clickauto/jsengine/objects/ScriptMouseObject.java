@@ -79,11 +79,11 @@ public class ScriptMouseObject implements MouseObject {
         switch (direction) {
             case "DOWN":
                 robot.mouseWheel(amount);
-                robot.delay(getMultipliedWheelDelay());
+                delay(getMultipliedWheelDelay());
                 break;
             case "UP":
                 robot.mouseWheel(amount * -1);
-                robot.delay(getMultipliedWheelDelay());
+                delay(getMultipliedWheelDelay());
                 break;
             default:
                 ClickAutoLog.get().error("Wrong wheel direction '%s'\n", direction);
