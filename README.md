@@ -1,4 +1,4 @@
-# FClickAuto
+# JClickAuto
 This library helps to control the mouse, keyboard, clipborad and a lot of other things
 
 # Quick launch
